@@ -1,12 +1,15 @@
 # eCommerceASPNetCore
-
 A practice ASP.NET core assignment with: MVC, and SPA (ReactJS) 
 
-<img src="F:\_Source\_Github\eCommerceASPNetCore\dotNET_Recommended_Architecture.png" alt=".Net Recommended Architecture" style="zoom:40%;" />
+<img src=".\dotNET_Recommended_Architecture.png" alt=".Net Recommended Architecture" width="550" />
 
-##### *\*Todo* 
+## *\*Todo* 
 
 Deadline: ***23/07/2021***
+
+2 Stage:
+- Customer site
+- Admin site
 
 ## 1. **Customer site (storefront)**
 
