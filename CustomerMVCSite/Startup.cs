@@ -1,3 +1,5 @@
+using CustomerMVCSite.Services;
+using CustomerMVCSite.Services.Interface;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -23,6 +25,8 @@ namespace CustomerMVCSite
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddScoped<IProductService>();
+            services.AddScoped<ICategoryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

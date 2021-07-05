@@ -14,8 +14,5 @@ namespace Domain
 
         [Required]
         public string Name { get; set; }
-
-        [Required]
-        public Category Category { get; set; }
     }
 }

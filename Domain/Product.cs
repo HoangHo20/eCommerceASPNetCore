@@ -19,6 +19,8 @@ namespace Domain
 
         public int Stock { get; set; }
 
+        public int Status { get; set; }
+
         public List<ProductImage> Images { get; set; }
 
         public SubCategory SubCategory { get; set; }
