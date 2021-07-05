@@ -29,7 +29,13 @@ namespace CustomerMVCSite.Controllers
         public IActionResult Index()
         {
             List<Category> categories = _categoryService.getAllCategoriesWithSubCategories();
-            return View(categories);
+            List<Product> products = _productService.getAllProductAndProductImageOnly();
+
+            HomeModel homeModel = new HomeModel();
+            homeModel.categories = categories;
+            homeModel.products = products;
+
+            return View(homeModel);
         }
 
         public IActionResult Privacy()

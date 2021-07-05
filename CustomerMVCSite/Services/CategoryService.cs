@@ -67,6 +67,8 @@ namespace CustomerMVCSite.Services
                         subCategoryGotCount++;
                     }
                 }
+
+                categories.Add(cate);
             }
 
             return categories;
