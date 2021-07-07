@@ -24,6 +24,13 @@ namespace CustomerMVCSite.Services
             return createDumbData(description, images, subcategory);
         }
 
+        public Product getProductByID(int id)
+        {
+            List<Product> products = createDumbData(true, true, true);
+
+            return products.Find(p => p.ID == id);
+        }
+
         // Dumb data
         private List<Product> createDumbData(bool hasDescription = false, bool hasImages = false, bool hasSubcategory = false)
         {

@@ -15,5 +15,7 @@ namespace CustomerMVCSite.Services.Interface
         public List<Product> getAllProductCustomProperties(bool description,
             bool images,
             bool subcategory);
+
+        public Product getProductByID(int ID);
     }
 }

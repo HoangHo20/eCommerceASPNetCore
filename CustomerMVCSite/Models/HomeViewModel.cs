@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace CustomerMVCSite.Models
 {
-    public class HomeModel
+    public class HomeViewModel
     {
+        public Product product { get; set; }
+
         public List<Product> products { get; set; }
 
         public List<Category> categories { get; set; }

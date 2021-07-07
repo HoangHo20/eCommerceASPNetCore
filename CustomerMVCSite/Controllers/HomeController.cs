@@ -31,7 +31,7 @@ namespace CustomerMVCSite.Controllers
             List<Category> categories = _categoryService.getAllCategoriesWithSubCategories();
             List<Product> products = _productService.getAllProductAndProductImageOnly();
 
-            HomeModel homeModel = new HomeModel();
+            HomeViewModel homeModel = new HomeViewModel();
             homeModel.categories = categories;
             homeModel.products = products;
 
@@ -41,6 +41,21 @@ namespace CustomerMVCSite.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+        
+        [HttpGet]
+        public IActionResult Product(int id)
+        {
+            List<Category> categories = _categoryService.getAllCategoriesWithSubCategories();
+            List<Product> products = _productService.getAllProductAndProductImageOnly();
+            Product product = _productService.getProductByID(id);
+
+            HomeViewModel homeModel = new HomeViewModel();
+            homeModel.categories = categories;
+            homeModel.product = product;
+            homeModel.products = products;
+
+            return View(homeModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

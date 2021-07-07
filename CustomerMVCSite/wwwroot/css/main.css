@@ -67,7 +67,7 @@ a:active,
 a:focus {
   text-decoration: none;
 }
-img[src="~/images/blank.gif"] {
+img[src="assets/images/blank.gif"] {
   background: url("../images/ajax.gif") no-repeat scroll center center #ffffff;
 }
 
@@ -3674,7 +3674,6 @@ font-family: FontAwesome;
   font-size: 12px;
   line-height: 24px;
   margin-left: 9px;
-  margin-right: -4px;
   padding: 0px;
 }
 .breadcrumb ul li:last-child:after {
@@ -6266,7 +6265,7 @@ li.dropdown.mega-menu a.dropdown-toggle > ul.dropdown-menu:after {
     text-align: center;
     font-family: FontAwesome;
     font-weight: normal;
-    background-image: url(../../images/~/plus.html);
+    background-image: url(../../images/assets/plus.html);
     background-repeat: no-repeat;
 }
   .heading-title {
