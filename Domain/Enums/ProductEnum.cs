@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Enums
+namespace eCommerceASPNetCore.Domain.Enums
 {
     public enum ProductEnum
     {

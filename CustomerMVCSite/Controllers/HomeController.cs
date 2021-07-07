@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using CustomerMVCSite.Services.Interface;
-using Domain;
+using eCommerceASPNetCore.Domain;
 
 namespace CustomerMVCSite.Controllers
 {

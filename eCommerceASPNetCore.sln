@@ -13,7 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{E9C120E6-9C42-46B2-BFCF-417E4E1850A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{506A93BD-1A0A-4A75-888E-8E696FF275D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eCommerceASPNetCore.Domain", "Domain\eCommerceASPNetCore.Domain.csproj", "{506A93BD-1A0A-4A75-888E-8E696FF275D8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eCommerceASPNetCore.Data", "Data\eCommerceASPNetCore.Data.csproj", "{44328860-204D-4400-B7E7-237535E44EF1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{506A93BD-1A0A-4A75-888E-8E696FF275D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{506A93BD-1A0A-4A75-888E-8E696FF275D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{506A93BD-1A0A-4A75-888E-8E696FF275D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44328860-204D-4400-B7E7-237535E44EF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44328860-204D-4400-B7E7-237535E44EF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44328860-204D-4400-B7E7-237535E44EF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44328860-204D-4400-B7E7-237535E44EF1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -36,6 +42,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{35CA3F63-3CA1-4E33-80AE-56E015A230B0} = {228D0334-BF65-4D90-A5EB-C645540B8CF0}
 		{506A93BD-1A0A-4A75-888E-8E696FF275D8} = {0C8B2C57-1C5C-4C85-860B-45562D432C6E}
+		{44328860-204D-4400-B7E7-237535E44EF1} = {0C8B2C57-1C5C-4C85-860B-45562D432C6E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EA44E4E2-A20B-4537-A7A9-AEFB43998A37}

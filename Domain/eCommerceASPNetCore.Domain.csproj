@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>eCommerceASPNetCore.Domain</AssemblyName>
+    <RootNamespace>eCommerceASPNetCore.Domain</RootNamespace>
   </PropertyGroup>
 
 </Project>

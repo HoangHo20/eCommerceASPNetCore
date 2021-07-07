@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CustomerMVCSite.Services.Interface;
-using Domain;
+using eCommerceASPNetCore.Domain;
 
 namespace CustomerMVCSite.Services
 {
@@ -64,7 +64,7 @@ namespace CustomerMVCSite.Services
                 // Product 1
                 Product prod = new Product()
                 {
-                    ID = 1,
+                    ID = i+1,
                     Name = pName[i],
                     Price = pPrice[i],
                 };

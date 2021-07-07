@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Domain;
+using eCommerceASPNetCore.Domain;
 
 namespace CustomerMVCSite.Services.Interface
 {

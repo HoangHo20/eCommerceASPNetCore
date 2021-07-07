@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain
+namespace eCommerceASPNetCore.Domain
 {
     public class SubCategory
     {
@@ -14,5 +14,9 @@ namespace Domain
 
         [Required]
         public string Name { get; set; }
+
+        public List<Product> Products { get; set; }
+
+        public Category Category { get; set; }
     }
 }

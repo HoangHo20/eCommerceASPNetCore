@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain
+namespace eCommerceASPNetCore.Domain
 {
     public class ProductImage
     {
         public int ID { get; set; }
 
         public string Url { get; set; }
+
+        public Product Product { get; set; }
     }
 }
