@@ -8,6 +8,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using CustomerMVCSite.Services.Interface;
 using eCommerceASPNetCore.Domain;
+using Microsoft.Extensions.Options;
+using CustomerMVCSite.Options;
 
 namespace CustomerMVCSite.Controllers
 {
@@ -16,14 +18,17 @@ namespace CustomerMVCSite.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IProductService _productService;
         private readonly ICategoryService _categoryService;
+        private readonly ICloudinaryService _cloudinaryService;
 
         public HomeController(ILogger<HomeController> logger, 
             IProductService productService,
-            ICategoryService categoryService)
+            ICategoryService categoryService,
+            ICloudinaryService cloudinaryService)
         {
             _logger = logger;
             _productService = productService;
             _categoryService = categoryService;
+            _cloudinaryService = cloudinaryService;
         }
 
         public IActionResult Index()
@@ -69,7 +74,9 @@ namespace CustomerMVCSite.Controllers
         {
             Console.WriteLine("helloworld");
 
-            return View("EditDatabase");
+            var result = await _cloudinaryService.UploadImage(product.input_product_images);
+
+            return Ok(result);
         }
 
 

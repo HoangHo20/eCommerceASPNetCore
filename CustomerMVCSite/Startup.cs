@@ -1,13 +1,17 @@
+using CustomerMVCSite.Options;
 using CustomerMVCSite.Services;
 using CustomerMVCSite.Services.Interface;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace CustomerMVCSite
@@ -24,6 +28,13 @@ namespace CustomerMVCSite
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Configuration
+            services.AddOptions();
+            services.Configure<CloudinaryOptions>(
+                Configuration.GetSection("Cloudinary"));
+
+            // Services
+            services.AddScoped<ICloudinaryService, CloudinaryService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddControllersWithViews();
@@ -51,6 +62,19 @@ namespace CustomerMVCSite
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapGet("/ShowOptions", async (context) =>
+                {
+                    CloudinaryOptions cloudi = context.RequestServices.GetService<IOptionsMonitor<CloudinaryOptions>>().CurrentValue;
+
+                    var stringbuilder = new StringBuilder();
+
+                    stringbuilder.Append($"name={cloudi.CloudName}\n");
+                    stringbuilder.Append($"Key={cloudi.APIKey}\n");
+                    stringbuilder.Append($"Secret={cloudi.APISecret}\n");
+
+                    await context.Response.WriteAsync(stringbuilder.ToString());
+                });
             });
         }
     }
