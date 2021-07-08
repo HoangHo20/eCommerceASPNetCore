@@ -18,17 +18,14 @@ namespace CustomerMVCSite.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IProductService _productService;
         private readonly ICategoryService _categoryService;
-        private readonly ICloudinaryService _cloudinaryService;
-
+        
         public HomeController(ILogger<HomeController> logger, 
             IProductService productService,
-            ICategoryService categoryService,
-            ICloudinaryService cloudinaryService)
+            ICategoryService categoryService)
         {
             _logger = logger;
             _productService = productService;
             _categoryService = categoryService;
-            _cloudinaryService = cloudinaryService;
         }
 
         public IActionResult Index()
@@ -62,23 +59,6 @@ namespace CustomerMVCSite.Controllers
 
             return View(homeModel);
         }
-
-        [HttpGet]
-        public IActionResult EditDatabase()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> EditDatabase([FromForm] ProductFormEditDatabaseModel product)
-        {
-            Console.WriteLine("helloworld");
-
-            var result = await _cloudinaryService.UploadImage(product.input_product_images);
-
-            return Ok(result);
-        }
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

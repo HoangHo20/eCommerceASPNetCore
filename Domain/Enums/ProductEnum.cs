@@ -8,6 +8,6 @@ namespace eCommerceASPNetCore.Domain.Enums
 {
     public enum ProductEnum
     {
-        Deleted
+        Deleted=1
     }
 }

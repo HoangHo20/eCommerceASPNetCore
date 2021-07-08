@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CustomerMVCSite.Services.Interface;
+using eCommerceASPNetCore.Data;
 using eCommerceASPNetCore.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace CustomerMVCSite.Services
 {
@@ -31,8 +33,44 @@ namespace CustomerMVCSite.Services
             return products.Find(p => p.ID == id);
         }
 
-        // Dumb data
-        private List<Product> createDumbData(bool hasDescription = false, bool hasImages = false, bool hasSubcategory = false)
+        public int createProduct(Product product)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int createProduct(Product product, SubCategory subCategory, List<string> imageUrls)
+        {
+            if (imageUrls != null)
+            {
+                foreach (string imgUrl in imageUrls)
+                {
+                    ProductImage productImage = new ProductImage()
+                    {
+                        Url = imgUrl
+                    };
+
+                    product.Images.Add(productImage);
+                }
+            }
+
+            if (subCategory != null)
+            {
+                using (var context = new eCommerceNetCoreContext())
+                {
+                    product.SubCategory = subCategory;
+
+                    context.Products.Add(product);
+
+                    context.Entry(subCategory).State = EntityState.Modified;
+                    context.SaveChanges();
+                }
+            }
+
+            return product.ID;
+        }
+
+            // Dumb data
+            private List<Product> createDumbData(bool hasDescription = false, bool hasImages = false, bool hasSubcategory = false)
         {
             List<Product> products = new List<Product>();
 

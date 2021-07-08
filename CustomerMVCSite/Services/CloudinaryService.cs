@@ -47,6 +47,7 @@ namespace CustomerMVCSite.Services
                     new EagerTransformation().Width(200).Height(150).Crop("scale"),
                     new EagerTransformation().Width(500).Height(200).Crop("scale")
                 };
+                uploadParams.Folder = _cloudinaryOptions.GeneralFolder;
                 ImageUploadResult uploadResult = await _cloudinary.UploadAsync(uploadParams);
 
                 string url = uploadResult.SecureUrl.ToString();
@@ -76,6 +77,7 @@ namespace CustomerMVCSite.Services
                     memoryStream.Position = 0;
 
                     uploadParams.File = new FileDescription(imgFile.FileName, memoryStream);
+                    uploadParams.Folder = _cloudinaryOptions.GeneralFolder;
                     ImageUploadResult uploadResult = await _cloudinary.UploadAsync(uploadParams);
 
                     string url = uploadResult.SecureUrl.ToString();

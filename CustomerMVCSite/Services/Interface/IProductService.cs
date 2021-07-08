@@ -17,5 +17,10 @@ namespace CustomerMVCSite.Services.Interface
             bool subcategory);
 
         public Product getProductByID(int ID);
+
+        public int createProduct(Product product);
+
+        public int createProduct(Product product, SubCategory subCategory, List<string> imageUrls);
+
     }
 }

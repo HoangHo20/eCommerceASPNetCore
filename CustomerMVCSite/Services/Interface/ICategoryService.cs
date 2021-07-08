@@ -11,5 +11,9 @@ namespace CustomerMVCSite.Services.Interface
         public List<Category> getAllCategoriesNameOnly();
 
         public List<Category> getAllCategoriesWithSubCategories();
+
+        public Task<SubCategory> getSubCategoryByID(int id, bool isGetProducts = false);
+
+        public Task<SubCategory> getSubCategoryByName(string name, bool isGetProducts = false);
     }
 }

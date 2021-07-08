@@ -21,7 +21,7 @@ namespace eCommerceASPNetCore.Domain
 
         public int Status { get; set; }
 
-        public List<ProductImage> Images { get; set; }
+        public List<ProductImage> Images { get; set; } = new List<ProductImage>();
 
         public SubCategory SubCategory { get; set; }
     }

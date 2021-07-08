@@ -14,5 +14,7 @@ namespace CustomerMVCSite.Options
         public string APISecret { get; set; }
 
         public string APIEnvironmentVariable { get; set; }
+
+        public string GeneralFolder { get; set; }
     }
 }

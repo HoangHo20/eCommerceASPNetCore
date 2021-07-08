@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CustomerMVCSite.Services.Interface;
+using eCommerceASPNetCore.Data;
 using eCommerceASPNetCore.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace CustomerMVCSite.Services
 {
@@ -17,6 +19,46 @@ namespace CustomerMVCSite.Services
         public List<Category> getAllCategoriesWithSubCategories()
         {
             return createDumbData(true);
+        }
+
+        public async Task<SubCategory> getSubCategoryByID(int id, bool isGetProducts = false)
+        {
+            using (var context = new eCommerceNetCoreContext())
+            {
+                SubCategory subCategory = context.SubCategories
+                    .TagWith("Get subcategory by ID")
+                    .Where(sub => sub.ID == id)
+                    .Select(subProp => new SubCategory { ID = subProp.ID, Name = subProp.Name })
+                    .FirstOrDefault();
+
+                return subCategory;
+            }
+        }
+
+        public async Task<SubCategory> getSubCategoryByName(string name, bool isGetProducts = false)
+        {
+            using (var context = new eCommerceNetCoreContext())
+            {
+                SubCategory subCategory;
+
+                if (isGetProducts) {
+                    subCategory = context.SubCategories
+                        .TagWith("Get subcategory by Name")
+                        .Where(sub => sub.Name.Equals(name))
+                        .FirstOrDefault();
+                }
+                else
+                {
+                    subCategory = context.SubCategories
+                        .TagWith("Get subcategory by Name")
+                        .Where(sub => sub.Name.Equals(name))
+                        .Select(subProp => new SubCategory { ID = subProp.ID, 
+                            Name = subProp.Name })
+                        .FirstOrDefault();
+                }
+
+                return subCategory;
+            }
         }
 
         // Dumb data

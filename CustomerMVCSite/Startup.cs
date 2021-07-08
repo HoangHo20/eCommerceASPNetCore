@@ -62,19 +62,6 @@ namespace CustomerMVCSite
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-                endpoints.MapGet("/ShowOptions", async (context) =>
-                {
-                    CloudinaryOptions cloudi = context.RequestServices.GetService<IOptionsMonitor<CloudinaryOptions>>().CurrentValue;
-
-                    var stringbuilder = new StringBuilder();
-
-                    stringbuilder.Append($"name={cloudi.CloudName}\n");
-                    stringbuilder.Append($"Key={cloudi.APIKey}\n");
-                    stringbuilder.Append($"Secret={cloudi.APISecret}\n");
-
-                    await context.Response.WriteAsync(stringbuilder.ToString());
-                });
             });
         }
     }
