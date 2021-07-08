@@ -14,7 +14,7 @@ namespace eCommerceASPNetCore.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer("Data Source=DESKTOP-92B5VRS\\SQLEXPRESS;Initial Catalog=eCommerceNetCoreTest;Integrated Security=True");
+            optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=eCommerceASPNetCore;Trusted_Connection=True;");
             //optionsBuilder.UseSqlServer(@"Server=DESKTOP-92B5VRS\SQLEXPRESS;Database=eCommerceNetCore;Trusted_Connection=True;MultipleActiveResultSets=True;Integrated Security=true");
         }
     }

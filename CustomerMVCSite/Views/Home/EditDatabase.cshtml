@@ -1,0 +1,77 @@
+﻿@model ProductFormEditDatabaseModel
+@{ 
+    Layout = "_DefaultLayout";
+    ViewData["title"] = "Data management";
+}
+
+<h1>ADD PRODUCT</h1>
+<div class="container border">
+    <form enctype="multipart/form-data" asp-controller="home" asp-action="EditDatabase" method="POST">
+        <div class="form-group">
+            <label asp-for="input_product_name">name</label>
+            <input class="form-control" asp-for="input_product_name" type="text">
+        </div>
+
+        <div class="form-group">
+            <label for="input_product_description">description</label>
+            <input class="form-control" id="input_product_description" name="input_product_description" type="text">
+        </div>
+
+        <div class="form-group">
+            <label for="input_product_price">price</label>
+            <input class="form-control" id="input_product_price" name="input_product_price" type="text">
+        </div>
+
+        <div class="form-group">
+            <label for="input_product_stock">stock</label>
+            <input class="form-control" id="input_product_stock" name="input_product_stock" type="number">
+        </div>
+
+        <div class="form-group">
+            <label for="input_product_subcategory">SubCategory ID</label>
+            <input class="form-control" id="input_product_subcategory" name="input_product_subcategory" type="text">
+        </div>
+
+        <div class="form-group">
+            <label asp-for="input_product_images">Product Images</label>
+            <input class="form-control" asp-for="input_product_images" type="file" onchange="readURL(this);" multiple />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <div id="images-container" class="row">
+
+    </div>
+</div>
+
+<script>
+    function readURL(input) {
+        const images_container = document.getElementById('images-container');
+        images_container.innerHTML = ""
+
+        if (input.files) {
+            for (let fi of input.files) {
+
+
+                var fileReader = new FileReader();
+                fileReader.onload = function (e) {
+                    // $('#blah')
+                    //     .attr('src', e.target.result);
+
+                    const img = document.createElement("img");
+                    img.setAttribute("src", e.target.result)
+                    img.setAttribute("class", "img-thumbnail col-3")
+
+                    images_container.appendChild(img);
+                };
+
+                // input.files.forEach (fi => {
+
+                // })
+                fileReader.readAsDataURL(fi);
+            }
+
+        }
+    }
+</script>

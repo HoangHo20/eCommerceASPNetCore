@@ -58,6 +58,21 @@ namespace CustomerMVCSite.Controllers
             return View(homeModel);
         }
 
+        [HttpGet]
+        public IActionResult EditDatabase()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditDatabase([FromForm] ProductFormEditDatabaseModel product)
+        {
+            Console.WriteLine("helloworld");
+
+            return View("EditDatabase");
+        }
+
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
