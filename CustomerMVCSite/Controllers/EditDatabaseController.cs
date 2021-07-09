@@ -16,18 +16,15 @@ namespace CustomerMVCSite.Controllers
     public class EditDatabaseController : Controller
     {
         private readonly ILogger<EditDatabaseController> _logger;
-        private readonly IProductService _productService;
-        private readonly ICategoryService _categoryService;
+        private readonly IDatabaseService _databaseService;
         private readonly IUploadService _uploadService;
 
         public EditDatabaseController(ILogger<EditDatabaseController> logger,
-            IProductService productService,
-            ICategoryService categoryService,
+            IDatabaseService databaseService,
             IUploadService uploadService)
         {
             _logger = logger;
-            _productService = productService;
-            _categoryService = categoryService;
+            _databaseService = databaseService;
             _uploadService = uploadService;
         }
 
@@ -42,7 +39,7 @@ namespace CustomerMVCSite.Controllers
         {
             try
             {
-                var subCategory = _categoryService.getSubCategoryByName(product.SubCategoryName, true);
+                var subCategory = _databaseService.getSubCategoryByName(product.SubCategoryName, true);
 
                 if (subCategory != null) {
                     List<string> imageUrls = null;
@@ -52,7 +49,7 @@ namespace CustomerMVCSite.Controllers
                         imageUrls = await _uploadService.UploadImage(product.imageFiles);
                     }
 
-                    int product_id = _productService.createProduct(product, subCategory, imageUrls);
+                    int product_id = _databaseService.createProduct(product, subCategory, imageUrls);
                 }
 
                 return Ok();

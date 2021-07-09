@@ -41,8 +41,7 @@ namespace CustomerMVCSite
             //Temporary lock cloudinary
             //services.AddScoped<IUploadService, CloudinaryService>();
             services.AddScoped<IUploadService, LocalUploadService>();
-            services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IDatabaseService, DatabaseService>();
             services.AddControllersWithViews();
         }
 

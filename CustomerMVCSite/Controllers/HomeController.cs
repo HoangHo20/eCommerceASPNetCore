@@ -16,26 +16,21 @@ namespace CustomerMVCSite.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IProductService _productService;
-        private readonly ICategoryService _categoryService;
+        private readonly IDatabaseService _databaseService;
         
-        public HomeController(ILogger<HomeController> logger, 
-            IProductService productService,
-            ICategoryService categoryService)
+        public HomeController(ILogger<HomeController> logger,
+            IDatabaseService databaseService)
         {
             _logger = logger;
-            _productService = productService;
-            _categoryService = categoryService;
+            _databaseService = databaseService;
         }
 
         public IActionResult Index()
         {
-            List<Category> categories = _categoryService.getAllCategory(true, true);
-            List<Product> products = _productService.getAllProductAndProductImageOnly();
+            List<Category> categories = _databaseService.getAllCategory(true, true);
 
             HomeViewModel homeModel = new HomeViewModel();
             homeModel.categories = categories;
-            homeModel.products = products;
 
             return View(homeModel);
         }
@@ -48,9 +43,9 @@ namespace CustomerMVCSite.Controllers
         [HttpGet]
         public IActionResult Product(int id)
         {
-            List<Category> categories = _categoryService.getAllCategoriesWithSubCategories();
-            List<Product> products = _productService.getAllProductAndProductImageOnly();
-            Product product = _productService.getProductByID(id);
+            List<Category> categories = _databaseService.getAllCategoriesWithSubCategories();
+            List<Product> products = _databaseService.getAllProductAndProductImageOnly();
+            Product product = _databaseService.getProductByID(id);
 
             HomeViewModel homeModel = new HomeViewModel();
             homeModel.categories = categories;

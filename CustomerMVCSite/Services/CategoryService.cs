@@ -9,80 +9,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CustomerMVCSite.Services
 {
-    public class CategoryService : ICategoryService
+    public class CategoryService
     {
-        public List<Category> getAllCategoriesNameOnly()
-        {
-            return createDumbData(false);
-        }
-
-        public List<Category> getAllCategoriesWithSubCategories()
-        {
-            return createDumbData(true);
-        }
-
-        public List<Category> getAllCategory(bool isGetSubcategories = false, bool isGetProducts = false)
-        {
-            List<Category> categories;
-
-            using (var context = new eCommerceNetCoreContext())
-            {
-                categories = context.Categories
-                    .Include(category => category.SubCategories)
-                        .ThenInclude(subcategory => subcategory.Products)
-                            .ThenInclude(product => product.Images)
-                    .ToList();
-            }
-
-            return categories;
-        }
-
-        public SubCategory getSubCategoryByID(int id, bool isGetProducts = false)
-        {
-            using (var context = new eCommerceNetCoreContext())
-            {
-                SubCategory subCategory = context.SubCategories
-                    .TagWith("Get subcategory by ID")
-                    .Where(sub => sub.ID == id)
-                    .Select(subProp => new SubCategory { ID = subProp.ID, Name = subProp.Name })
-                    .FirstOrDefault();
-
-                return subCategory;
-            }
-        }
-
-        public SubCategory getSubCategoryByName(string name, bool isGetProducts = false)
-        {
-            using (var context = new eCommerceNetCoreContext())
-            {
-                SubCategory subCategory;
-
-                if (isGetProducts)
-                {
-                    subCategory = context.SubCategories
-                        .TagWith("Get subcategory by Name")
-                        .Where(sub => sub.Name.Equals(name))
-                        .FirstOrDefault();
-                }
-                else
-                {
-                    subCategory = context.SubCategories
-                        .TagWith("Get subcategory by Name")
-                        .Where(sub => sub.Name.Equals(name))
-                        .Select(subProp => new SubCategory
-                        {
-                            ID = subProp.ID,
-                            Name = subProp.Name
-                        })
-                        .FirstOrDefault();
-                }
-
-                return subCategory;
-            }
-        }
-
         // Dumb data
-        private List<Category> createDumbData(bool hasSubCategories = false)
+        public static List<Category> createDumbData(bool hasSubCategories = false)
         {
             string[] categoryName = { "CPU", "PSU", "Ram", "VGA" };
             string[] subCategoryName =

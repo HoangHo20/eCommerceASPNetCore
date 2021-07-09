@@ -9,68 +9,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CustomerMVCSite.Services
 {
-    public class ProductService : IProductService
+    public class ProductService
     {
-        public List<Product> getAllProductAndItsProperties()
-        {
-            throw new NotImplementedException();
-        }
 
-        public List<Product> getAllProductAndProductImageOnly()
-        {
-            return createDumbData(false, true, false);
-        }
 
-        public List<Product> getAllProductCustomProperties(bool description, bool images, bool subcategory)
-        {
-            return createDumbData(description, images, subcategory);
-        }
-
-        public Product getProductByID(int id)
-        {
-            List<Product> products = createDumbData(true, true, true);
-
-            return products.Find(p => p.ID == id);
-        }
-
-        public int createProduct(Product product)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int createProduct(Product product, SubCategory subCategory, List<string> imageUrls)
-        {
-            if (imageUrls != null)
-            {
-                foreach (string imgUrl in imageUrls)
-                {
-                    ProductImage productImage = new ProductImage()
-                    {
-                        Url = imgUrl
-                    };
-
-                    product.Images.Add(productImage);
-                }
-            }
-
-            if (subCategory != null)
-            {
-                using (var context = new eCommerceNetCoreContext())
-                {
-                    product.SubCategory = subCategory;
-
-                    context.Products.Add(product);
-
-                    context.Entry(subCategory).State = EntityState.Modified;
-                    context.SaveChanges();
-                }
-            }
-
-            return product.ID;
-        }
-
-            // Dumb data
-            private List<Product> createDumbData(bool hasDescription = false, bool hasImages = false, bool hasSubcategory = false)
+        // Dumb data
+        public static List<Product> createDumbData(bool hasDescription = false, bool hasImages = false, bool hasSubcategory = false)
         {
             List<Product> products = new List<Product>();
 
