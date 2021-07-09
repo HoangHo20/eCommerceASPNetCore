@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CustomerMVCSite.Services.Interface
 {
-    public interface ICloudinaryService
+    public interface IUploadService
     {
         public Task<List<string>> UploadImage(IFormFile imgFile);
 

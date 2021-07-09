@@ -18,17 +18,17 @@ namespace CustomerMVCSite.Controllers
         private readonly ILogger<EditDatabaseController> _logger;
         private readonly IProductService _productService;
         private readonly ICategoryService _categoryService;
-        private readonly ICloudinaryService _cloudinaryService;
+        private readonly IUploadService _uploadService;
 
         public EditDatabaseController(ILogger<EditDatabaseController> logger,
             IProductService productService,
             ICategoryService categoryService,
-            ICloudinaryService cloudinaryService)
+            IUploadService uploadService)
         {
             _logger = logger;
             _productService = productService;
             _categoryService = categoryService;
-            _cloudinaryService = cloudinaryService;
+            _uploadService = uploadService;
         }
 
         [HttpGet]
@@ -38,22 +38,24 @@ namespace CustomerMVCSite.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Product([FromForm] ProductFormEditDatabaseModel product)
+        public async Task<IActionResult> Product([Bind("Name", "SubCategoryName", "imageFiles")] ProductFormEditDatabaseModel product)
         {
             try
             {
-                List<string> imageUrls = null;
-
-                if (product.imageFiles != null)
-                {
-                    imageUrls = await _cloudinaryService.UploadImage(product.imageFiles);
-                }
-
                 var subCategory = await _categoryService.getSubCategoryByName(product.SubCategoryName, true);
 
-                int product_id = _productService.createProduct(product, subCategory, imageUrls);
+                if (subCategory != null) {
+                    List<string> imageUrls = null;
 
-                return Ok($"ProductID:{product_id}");
+                    if (product.imageFiles != null)
+                    {
+                        imageUrls = await _uploadService.UploadImage(product.imageFiles);
+                    }
+
+                    int product_id = _productService.createProduct(product, subCategory, imageUrls);
+                }
+
+                return Ok();
             } catch(Exception ex)
             {
                 return BadRequest(ex);

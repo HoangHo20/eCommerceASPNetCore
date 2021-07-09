@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace CustomerMVCSite.Services
 {
-    public class CloudinaryService : ICloudinaryService
+    public class CloudinaryService : IUploadService
     {
         private readonly CloudinaryOptions _cloudinaryOptions;
         private readonly Cloudinary _cloudinary;

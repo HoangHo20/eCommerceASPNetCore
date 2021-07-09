@@ -30,11 +30,17 @@ namespace CustomerMVCSite
         {
             // Configuration
             services.AddOptions();
+
             services.Configure<CloudinaryOptions>(
                 Configuration.GetSection("Cloudinary"));
 
+            services.Configure<LocalUploadOptions>(
+                Configuration.GetSection("LocalUpload"));
+
             // Services
-            services.AddScoped<ICloudinaryService, CloudinaryService>();
+            //Temporary lock cloudinary
+            //services.AddScoped<IUploadService, CloudinaryService>();
+            services.AddScoped<IUploadService, LocalUploadService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddControllersWithViews();
