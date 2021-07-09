@@ -2,7 +2,7 @@
 
 namespace eCommerceASPNetCore.Data.Migrations
 {
-    public partial class Init_eCommerceASPNetCore_Db : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

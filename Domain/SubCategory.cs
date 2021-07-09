@@ -15,8 +15,10 @@ namespace eCommerceASPNetCore.Domain
         [Required]
         public string Name { get; set; }
 
-        public List<Product> Products { get; set; } = new List<Product>();
+        public virtual List<Product> Products { get; set; } = new List<Product>();
 
-        public Category Category { get; set; }
+        public virtual Category Category { get; set; }
+
+        public int status { get; set; }
     }
 }

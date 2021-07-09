@@ -21,7 +21,23 @@ namespace CustomerMVCSite.Services
             return createDumbData(true);
         }
 
-        public async Task<SubCategory> getSubCategoryByID(int id, bool isGetProducts = false)
+        public List<Category> getAllCategory(bool isGetSubcategories = false, bool isGetProducts = false)
+        {
+            List<Category> categories;
+
+            using (var context = new eCommerceNetCoreContext())
+            {
+                categories = context.Categories
+                    .Include(category => category.SubCategories)
+                        .ThenInclude(subcategory => subcategory.Products)
+                            .ThenInclude(product => product.Images)
+                    .ToList();
+            }
+
+            return categories;
+        }
+
+        public SubCategory getSubCategoryByID(int id, bool isGetProducts = false)
         {
             using (var context = new eCommerceNetCoreContext())
             {
@@ -35,13 +51,14 @@ namespace CustomerMVCSite.Services
             }
         }
 
-        public async Task<SubCategory> getSubCategoryByName(string name, bool isGetProducts = false)
+        public SubCategory getSubCategoryByName(string name, bool isGetProducts = false)
         {
             using (var context = new eCommerceNetCoreContext())
             {
                 SubCategory subCategory;
 
-                if (isGetProducts) {
+                if (isGetProducts)
+                {
                     subCategory = context.SubCategories
                         .TagWith("Get subcategory by Name")
                         .Where(sub => sub.Name.Equals(name))
@@ -52,8 +69,11 @@ namespace CustomerMVCSite.Services
                     subCategory = context.SubCategories
                         .TagWith("Get subcategory by Name")
                         .Where(sub => sub.Name.Equals(name))
-                        .Select(subProp => new SubCategory { ID = subProp.ID, 
-                            Name = subProp.Name })
+                        .Select(subProp => new SubCategory
+                        {
+                            ID = subProp.ID,
+                            Name = subProp.Name
+                        })
                         .FirstOrDefault();
                 }
 

@@ -15,6 +15,8 @@ namespace eCommerceASPNetCore.Domain
         [Required]
         public string Name { get; set; }
 
-        public List<SubCategory> SubCategories { get; set; } = new List<SubCategory>();
+        public virtual List<SubCategory> SubCategories { get; set; } = new List<SubCategory>();
+
+        public int status { get; set; }
     }
 }

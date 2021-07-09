@@ -38,11 +38,11 @@ namespace CustomerMVCSite.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Product([Bind("Name", "SubCategoryName", "imageFiles")] ProductFormEditDatabaseModel product)
+        public async Task<IActionResult> Product([FromForm] ProductFormEditDatabaseModel product)
         {
             try
             {
-                var subCategory = await _categoryService.getSubCategoryByName(product.SubCategoryName, true);
+                var subCategory = _categoryService.getSubCategoryByName(product.SubCategoryName, true);
 
                 if (subCategory != null) {
                     List<string> imageUrls = null;

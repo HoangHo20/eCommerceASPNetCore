@@ -30,7 +30,7 @@ namespace CustomerMVCSite.Controllers
 
         public IActionResult Index()
         {
-            List<Category> categories = _categoryService.getAllCategoriesWithSubCategories();
+            List<Category> categories = _categoryService.getAllCategory(true, true);
             List<Product> products = _productService.getAllProductAndProductImageOnly();
 
             HomeViewModel homeModel = new HomeViewModel();

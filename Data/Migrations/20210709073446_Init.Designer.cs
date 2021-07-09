@@ -10,8 +10,8 @@ using eCommerceASPNetCore.Data;
 namespace eCommerceASPNetCore.Data.Migrations
 {
     [DbContext(typeof(eCommerceNetCoreContext))]
-    [Migration("20210707143632_Init_eCommerceASPNetCore_Db")]
-    partial class Init_eCommerceASPNetCore_Db
+    [Migration("20210709073446_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
