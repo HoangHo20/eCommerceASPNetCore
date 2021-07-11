@@ -39,6 +39,21 @@ namespace CustomerMVCSite.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public IActionResult SubCategory(int id)
+        {
+            var products = _databaseService.getProductsBySubcategoryID(id);
+
+            if (products != null && products.Count > 0)
+            {
+                return View(products);
+            }
+            else
+            {
+                return View("Error");
+            }
+        }
         
         [HttpGet]
         public IActionResult Product(int id)
@@ -50,14 +65,14 @@ namespace CustomerMVCSite.Controllers
                 return View(product);
             } else
             {
-                return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+                return View("Error");
             }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View();
         }
     }
 }

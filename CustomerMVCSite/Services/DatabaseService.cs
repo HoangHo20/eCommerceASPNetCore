@@ -39,6 +39,18 @@ namespace CustomerMVCSite.Services
             }
         }
 
+        public List<Product> getProductsBySubcategoryID(int subcategoryId)
+        {
+            using (var context = new eCommerceNetCoreContext())
+            {
+                return context.Products
+                    .Include(product => product.SubCategory)
+                    .Include(product => product.Images)
+                    .Where(product => product.SubCategory.ID == subcategoryId)
+                    .ToList();
+            }
+        }
+
         public int createProduct(Product product)
         {
             throw new NotImplementedException();
@@ -147,6 +159,5 @@ namespace CustomerMVCSite.Services
                 return subCategory;
             }
         }
-
     }
 }

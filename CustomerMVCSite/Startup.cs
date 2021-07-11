@@ -51,6 +51,7 @@ namespace CustomerMVCSite
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                //app.UseExceptionHandler("/Home/Error");
             }
             else
             {

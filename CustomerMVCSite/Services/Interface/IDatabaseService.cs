@@ -13,6 +13,7 @@ namespace CustomerMVCSite.Services.Interface
         public List<Product> getAllProductAndItsProperties();
         public List<Product> getAllProductCustomProperties(bool description, bool images, bool subcategory);
         public Product getProductByID(int ID);
+        public List<Product> getProductsBySubcategoryID(int subcategoryId);
         public int createProduct(Product product);
         public int createProduct(Product product, SubCategory subCategory, List<string> imageUrls);
 
