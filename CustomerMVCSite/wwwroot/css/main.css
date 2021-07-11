@@ -67,7 +67,7 @@ a:active,
 a:focus {
   text-decoration: none;
 }
-img[src="assets/images/blank.gif"] {
+img[src="/images/blank.gif"] {
   background: url("../images/ajax.gif") no-repeat scroll center center #ffffff;
 }
 
@@ -6265,7 +6265,7 @@ li.dropdown.mega-menu a.dropdown-toggle > ul.dropdown-menu:after {
     text-align: center;
     font-family: FontAwesome;
     font-weight: normal;
-    background-image: url(../../images/assets/plus.html);
+    background-image: url(../../images//plus.html);
     background-repeat: no-repeat;
 }
   .heading-title {

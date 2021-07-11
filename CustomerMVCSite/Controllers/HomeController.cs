@@ -43,16 +43,15 @@ namespace CustomerMVCSite.Controllers
         [HttpGet]
         public IActionResult Product(int id)
         {
-            List<Category> categories = _databaseService.getAllCategoriesWithSubCategories();
-            List<Product> products = _databaseService.getAllProductAndProductImageOnly();
-            Product product = _databaseService.getProductByID(id);
+            var product = _databaseService.getProductByID(id);
 
-            HomeViewModel homeModel = new HomeViewModel();
-            homeModel.categories = categories;
-            homeModel.product = product;
-            homeModel.products = products;
-
-            return View(homeModel);
+            if (product != null)
+            {
+                return View(product);
+            } else
+            {
+                return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

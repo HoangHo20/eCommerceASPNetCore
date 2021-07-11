@@ -34,6 +34,7 @@ namespace CustomerMVCSite.Services
                 return context.Products
                     .Where(product => product.ID == id)
                     .Include(product => product.Images)
+                    .Include(product => product.SubCategory)
                     .FirstOrDefault();
             }
         }
