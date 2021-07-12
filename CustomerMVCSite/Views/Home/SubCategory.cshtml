@@ -2,14 +2,17 @@
 @{
     ViewData["title"] = "SubCategory";
 }
-@model List<Product>
+@model PaginatedList<Product>
 
 <div class="breadcrumb">
     <div class="container">
         <div class="breadcrumb-inner">
             <ul class="list-inline list-unstyled">
                 <li><a asp-controller="home" asp-action="index">Home</a></li>
-                <li class='active'>@Model[0].SubCategory.Name</li>
+                @if (Model.Count > 0 && Model[0].SubCategory != null)
+                {
+                    <li class='active'>@Model[0].SubCategory.Name</li>
+                }
             </ul>
         </div>
         <!-- /.breadcrumb-inner -->
@@ -114,17 +117,7 @@
                         </div>
                         <!-- /.col -->
                         <div class="col col-sm-6 col-md-4 col-xs-6 col-lg-4 text-right">
-                            <div class="pagination-container">
-                                <ul class="list-inline list-unstyled">
-                                    <li class="prev"><a href="#"><i class="fa fa-angle-left"></i></a></li>
-                                    <li><a href="#">1</a></li>
-                                    <li class="active"><a href="#">2</a></li>
-                                    <li><a href="#">3</a></li>
-                                    <li><a href="#">4</a></li>
-                                    <li class="next"><a href="#"><i class="fa fa-angle-right"></i></a></li>
-                                </ul>
-                                <!-- /.list-inline -->
-                            </div>
+                            <partial name="_Paging"/>
                             <!-- /.pagination-container -->
                         </div>
                         <!-- /.col -->
@@ -220,17 +213,7 @@
                     <!-- /.tab-content -->
                     <div class="clearfix filters-container bottom-row">
                         <div class="text-right">
-                            <div class="pagination-container">
-                                <ul class="list-inline list-unstyled">
-                                    <li class="prev"><a href="#"><i class="fa fa-angle-left"></i></a></li>
-                                    <li><a href="#">1</a></li>
-                                    <li class="active"><a href="#">2</a></li>
-                                    <li><a href="#">3</a></li>
-                                    <li><a href="#">4</a></li>
-                                    <li class="next"><a href="#"><i class="fa fa-angle-right"></i></a></li>
-                                </ul>
-                                <!-- /.list-inline -->
-                            </div>
+                            <partial name="_Paging" />
                             <!-- /.pagination-container -->
                         </div>
                         <!-- /.text-right -->

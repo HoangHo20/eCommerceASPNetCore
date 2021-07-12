@@ -1,0 +1,58 @@
+﻿@using eCommerceASPNetCore.Domain
+@model PaginatedList<Product>
+@{ 
+    int offset = 2; // number of pages display 2 sides (left, right) of current page
+    int startPagingNum = Model.CurrentPage - offset;
+    int endPagingNum = Model.CurrentPage + offset;
+
+    if (startPagingNum < 1)
+    {
+        endPagingNum += offset - startPagingNum - 1;
+        startPagingNum = 1;
+    }
+
+    endPagingNum = endPagingNum > Model.TotalPages ? Model.TotalPages : endPagingNum;
+}
+
+<div class="pagination-container">
+    <ul class="list-inline list-unstyled">
+        @{
+            <li class="prev"><a asp-controller="home" asp-action="subcategory" asp-route-page="1">First page</a></li>
+            <li class="prev">
+                @if (Model.HasPreviousPage)
+                {
+                    <a asp-controller="home" asp-action="subcategory" asp-route-page="@(Model.CurrentPage - 1)"><i class="fa fa-angle-left"></i></a>
+                }
+                else
+                {
+                    <a href="#"><i class="fa fa-angle-left"></i></a>
+                }
+            </li>
+
+            @for (int ipage = startPagingNum; ipage <= endPagingNum; ipage++)
+            {
+                @if (ipage == Model.CurrentPage)
+                {
+                    <li class="active"><a href="#">@ipage</a></li>
+                }
+                else
+                {
+                    <li><a asp-controller="home" asp-action="subcategory" asp-route-page="@ipage">@ipage</a></li>
+                }
+            }
+
+            <li class="next">
+                @if (Model.HasNextPage)
+                {
+                    <a asp-controller="home" asp-action="subcategory" asp-route-page="@(Model.CurrentPage + 1)"><i class="fa fa-angle-right"></i></a>
+                }
+                else
+                {
+                    <a href="#"><i class="fa fa-angle-right"></i></a>
+                }
+            </li>
+            <li class="next"><a asp-controller="home" asp-action="subcategory" asp-route-page="@Model.TotalPages">Last page</a></li>
+        }
+    </ul>
+    <!-- /.list-inline -->
+</div>

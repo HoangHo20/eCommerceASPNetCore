@@ -1,6 +1,7 @@
 using CustomerMVCSite.Options;
 using CustomerMVCSite.Services;
 using CustomerMVCSite.Services.Interface;
+using eCommerceASPNetCore.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -42,6 +43,7 @@ namespace CustomerMVCSite
             //services.AddScoped<IUploadService, CloudinaryService>();
             services.AddScoped<IUploadService, LocalUploadService>();
             services.AddScoped<IDatabaseService, DatabaseService>();
+            services.AddScoped<eCommerceNetCoreContext>(_ => new eCommerceNetCoreContext());
             services.AddControllersWithViews();
         }
 

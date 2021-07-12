@@ -10,6 +10,7 @@ using CustomerMVCSite.Services.Interface;
 using eCommerceASPNetCore.Domain;
 using Microsoft.Extensions.Options;
 using CustomerMVCSite.Options;
+using eCommerceASPNetCore.Data;
 
 namespace CustomerMVCSite.Controllers
 {
@@ -40,14 +41,20 @@ namespace CustomerMVCSite.Controllers
             return View();
         }
 
+        //[Route("/home/subcategory/id")]
+        //[Route("/home/search")]
         [HttpGet]
-        public IActionResult SubCategory(int id)
+        public async Task<IActionResult> subcategory(int id, int? page)
         {
             var products = _databaseService.getProductsBySubcategoryID(id);
 
-            if (products != null && products.Count > 0)
+            if (products != null)
             {
-                return View(products);
+                int currentPage = (int)(page > 0 ? page : 1);
+
+                var pagingData = await PaginatedList<Product>.CreatePaging(products, currentPage, 3);
+
+                return View(pagingData);
             }
             else
             {

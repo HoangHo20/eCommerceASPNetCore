@@ -11,6 +11,13 @@ namespace CustomerMVCSite.Services
 {
     public class DatabaseService : IDatabaseService
     {
+        private readonly eCommerceNetCoreContext _context;
+
+        public DatabaseService(eCommerceNetCoreContext context)
+        {
+            _context = context;
+        }
+
         // ====   Product table   ====
         public List<Product> getAllProductAndItsProperties()
         {
@@ -39,16 +46,13 @@ namespace CustomerMVCSite.Services
             }
         }
 
-        public List<Product> getProductsBySubcategoryID(int subcategoryId)
+        public IQueryable<Product> getProductsBySubcategoryID(int subcategoryId)
         {
-            using (var context = new eCommerceNetCoreContext())
-            {
-                return context.Products
+            return _context.Products
                     .Include(product => product.SubCategory)
                     .Include(product => product.Images)
                     .Where(product => product.SubCategory.ID == subcategoryId)
-                    .ToList();
-            }
+                    .AsNoTracking();
         }
 
         public int createProduct(Product product)
