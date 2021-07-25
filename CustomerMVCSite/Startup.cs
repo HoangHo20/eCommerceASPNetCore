@@ -45,6 +45,9 @@ namespace CustomerMVCSite
             services.AddScoped<IDatabaseService, DatabaseService>();
             services.AddScoped<eCommerceNetCoreContext>(_ => new eCommerceNetCoreContext());
             services.AddControllersWithViews();
+
+            // Authentication
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
