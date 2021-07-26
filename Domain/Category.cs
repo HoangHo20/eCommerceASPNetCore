@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace eCommerceASPNetCore.Domain
 {
@@ -15,6 +16,9 @@ namespace eCommerceASPNetCore.Domain
         [Required]
         public string Name { get; set; }
 
+        public string Description { get; set; }
+
+        [JsonIgnore]
         public virtual List<SubCategory> SubCategories { get; set; } = new List<SubCategory>();
 
         public int status { get; set; }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace eCommerceASPNetCore.Domain
 {
@@ -21,8 +22,13 @@ namespace eCommerceASPNetCore.Domain
 
         public int Status { get; set; }
 
+        [JsonIgnore]
         public virtual List<ProductImage> Images { get; set; } = new List<ProductImage>();
 
+        [JsonIgnore]
         public virtual SubCategory SubCategory { get; set; }
+
+        [NotMapped]
+        public int SubCategory_ID { get; set; }
     }
 }

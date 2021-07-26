@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace eCommerceASPNetCore.Domain.Enums
 {
-    public enum ProductEnum
+    public enum CategoryEnum
     {
         Deleted = 1
     }

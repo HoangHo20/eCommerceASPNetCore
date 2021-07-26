@@ -54,6 +54,16 @@ namespace AuthServer.Configuration
                     ClientSecrets = new [] { new Secret("TomAndJerry".Sha512()) },
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
                     AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, "mvcApi" }
+                },
+                new Client
+                {
+                    ClientName = "MVC Client",
+                    ClientId = "mvc-client",
+                    AllowedGrantTypes = GrantTypes.Hybrid,
+                    RedirectUris = new List<string>{ "https://localhost:5010/signin-oidc" },
+                    RequirePkce = false,
+                    AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile },
+                    ClientSecrets = { new Secret("MVCSecret".Sha512()) }
                 }
             };
 

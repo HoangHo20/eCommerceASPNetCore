@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace eCommerceASPNetCore.Domain
 {
@@ -14,6 +15,10 @@ namespace eCommerceASPNetCore.Domain
 
         public string Url { get; set; }
 
+        [JsonIgnore]
         public virtual Product Product { get; set; }
+
+        [NotMapped]
+        public int Product_ID { get; set; }
     }
 }

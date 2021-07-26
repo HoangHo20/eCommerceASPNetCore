@@ -2,6 +2,8 @@ using CustomerMVCSite.Options;
 using CustomerMVCSite.Services;
 using CustomerMVCSite.Services.Interface;
 using eCommerceASPNetCore.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,8 +49,19 @@ namespace CustomerMVCSite
             services.AddScoped<eCommerceNetCoreContext>(_ => new eCommerceNetCoreContext());
             services.AddControllersWithViews();
 
+            // Web Api
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "coreApi", Version = "v1" });
+            });
+
             // Authentication
-            
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = "Cookie";
+                options.DefaultChallengeScheme = "oidc";
+            })
+                .AddCookie("Cookie");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,14 +71,18 @@ namespace CustomerMVCSite
             {
                 app.UseDeveloperExceptionPage();
                 //app.UseExceptionHandler("/Home/Error");
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "coreApi v1"));
             }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
+            //else
+            //{
+            //    app.UseExceptionHandler("/Home/Error");
+            //}
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
@@ -73,6 +91,10 @@ namespace CustomerMVCSite
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "api",
+                    pattern: "api/{controller}");
             });
         }
     }
