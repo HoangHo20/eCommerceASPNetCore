@@ -1,4 +1,5 @@
-﻿using CustomerMVCSite.Services.Interface;
+﻿using CustomerMVCSite.Models;
+using CustomerMVCSite.Services.Interface;
 using eCommerceASPNetCore.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -24,15 +25,15 @@ namespace CustomerMVCSite.Controllers
         }
 
         [HttpGet("")] 
-        public IEnumerable<Product> Get()
+        public IEnumerable<ProductModel> Get()
         {
-            return _databaseService.getAllProductAndItsProperties();
+            return _databaseService.getAllProductsOnly(false);
         }
 
         [HttpGet("{id}")]
-        public Product Get(int id)
+        public ProductModel Get(int id)
         {
-            return _databaseService.getProductByID(id);
+            return _databaseService.getProductModelByID(id);
         }
     }
 }

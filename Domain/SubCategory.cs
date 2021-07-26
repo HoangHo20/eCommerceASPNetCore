@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using eCommerceASPNetCore.Domain.Enums;
 
 namespace eCommerceASPNetCore.Domain
 {
@@ -24,9 +25,6 @@ namespace eCommerceASPNetCore.Domain
         [JsonIgnore]
         public virtual Category Category { get; set; }
 
-        [NotMapped]
-        public int Category_ID { get; set; }
-
-        public int status { get; set; }
+        public CategoryEnum status { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using eCommerceASPNetCore.Domain;
+﻿using CustomerMVCSite.Models;
+using eCommerceASPNetCore.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,26 +11,28 @@ namespace CustomerMVCSite.Services.Interface
     {
         // Product table
         public List<Product> getAllProductAndProductImageOnly();
-        public List<Product> getAllProductAndItsProperties();
+        public List<ProductModel> getAllProductAndItsProperties();
+        public List<ProductModel> getAllProductsOnly(bool isGetDescription);
         public List<Product> getAllProductCustomProperties(bool description, bool images, bool subcategory);
         public Product getProductByID(int ID);
+        public ProductModel getProductModelByID(int ID);
         public IQueryable<Product> getProductsBySubcategoryID(int subcategoryId);
         public int createProduct(Product product);
         public int createProduct(Product product, SubCategory subCategory, List<string> imageUrls);
-        
+
         // Category table
-        public List<Category> getAllCategoryOnly();
+        public List<CategoryModel> getAllCategoryOnly();
         public List<Category> getAllCategoriesWithSubCategories();
         public List<Category> getAllCategory(bool isGetSubcategories, bool isGetProducts);
         public Category getCategoryByName(string name);
-        public Task<Category> createCategory(Category category);
-        public Task<Category> updateCategory(Category category);
+        public Task<CategoryModel> createCategory(CategoryModel category);
+        public Task<CategoryModel> updateCategory(CategoryModel category);
 
         // SubCategory table
-        public List<SubCategory> getSubCategoriesByCategoryID(int id);
+        public List<SubcategoryModel> getSubCategoriesByCategoryID(int id);
         public SubCategory getSubCategoryByID(int id, bool isGetProducts = false);
         public SubCategory getSubCategoryByName(string name, bool isGetProducts = false);
-        public Task<SubCategory> createSubCategory(int CategoryId, SubCategory subCategory);
-        public Task<SubCategory> updateSubCategory(int CategoryId, SubCategory subCategory);
+        public Task<SubcategoryModel> createSubCategory(SubcategoryModel subCategory);
+        public Task<SubcategoryModel> updateSubCategory(SubcategoryModel subCategory);
     }
 }

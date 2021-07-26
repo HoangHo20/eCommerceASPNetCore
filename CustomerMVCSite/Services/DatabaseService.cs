@@ -1,6 +1,8 @@
-﻿using CustomerMVCSite.Services.Interface;
+﻿using CustomerMVCSite.Models;
+using CustomerMVCSite.Services.Interface;
 using eCommerceASPNetCore.Data;
 using eCommerceASPNetCore.Domain;
+using eCommerceASPNetCore.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,18 +14,30 @@ namespace CustomerMVCSite.Services
     public class DatabaseService : IDatabaseService
     {
         private readonly eCommerceNetCoreContext _context;
+        private readonly ICastService _castService;
 
-        public DatabaseService(eCommerceNetCoreContext context)
+        public DatabaseService(eCommerceNetCoreContext context, ICastService castService)
         {
             _context = context;
+            _castService = castService;
         }
 
         // ====   Product table   ====
-        public List<Product> getAllProductAndItsProperties()
+        public List<ProductModel> getAllProductAndItsProperties()
         {
             return _context.Products
+                .Where(product => product.Status == ProductEnum.Available)
                 .Include(product => product.Images)
                 .Include(product => product.SubCategory)
+                .Select(product => _castService.newProductModel(product, true, product.SubCategory.ID, product.Images, -1))
+                .ToList();
+        }
+
+        public List<ProductModel> getAllProductsOnly(bool isGetDescription)
+        {
+            return _context.Products
+                .Where(product => product.Status == ProductEnum.Available)
+                .Select(product => _castService.newProductModel(product, isGetDescription, -1, null, -1))
                 .ToList();
         }
 
@@ -40,15 +54,26 @@ namespace CustomerMVCSite.Services
         public Product getProductByID(int id)
         {
             return _context.Products
-                .Where(product => product.ID == id)
+                .Where(product => product.Status == ProductEnum.Available && product.ID == id)
                 .Include(product => product.Images)
                 .Include(product => product.SubCategory)
+                .FirstOrDefault();
+        }
+
+        public ProductModel getProductModelByID(int id)
+        {
+            return _context.Products
+                .Where(product => product.Status == ProductEnum.Available && product.ID == id)
+                .Include(product => product.Images)
+                .Include(product => product.SubCategory)
+                .Select(product => _castService.newProductModel(product, true, product.SubCategory.ID, product.Images, -1))
                 .FirstOrDefault();
         }
 
         public IQueryable<Product> getProductsBySubcategoryID(int subcategoryId)
         {
             return _context.Products
+                    .Where(product => product.Status == ProductEnum.Available)
                     .Include(product => product.SubCategory)
                     .Include(product => product.Images)
                     .Where(product => product.SubCategory.ID == subcategoryId)
@@ -92,14 +117,18 @@ namespace CustomerMVCSite.Services
         }
 
         // ====   Category table   ====
-        public List<Category> getAllCategoryOnly()
+        public List<CategoryModel> getAllCategoryOnly()
         {
-            return _context.Categories.ToList();
+            return _context.Categories
+                .Where(category => category.status == CategoryEnum.Available)
+                .Select(category => _castService.newCategoryModel(category))
+                .ToList();
         }
 
         public List<Category> getAllCategoriesWithSubCategories()
         {
             return _context.Categories
+                    .Where(category => category.status == CategoryEnum.Available)
                     .Include(category => category.SubCategories)
                     .ToList();
         }
@@ -107,6 +136,7 @@ namespace CustomerMVCSite.Services
         public List<Category> getAllCategory(bool isGetSubcategories = false, bool isGetProducts = false)
         {
             return _context.Categories
+                .Where(category => category.status == CategoryEnum.Available)
                 .Include(category => category.SubCategories)
                     .ThenInclude(subcategory => subcategory.Products)
                         .ThenInclude(product => product.Images)
@@ -121,33 +151,35 @@ namespace CustomerMVCSite.Services
             }
 
             return _context.Categories
-                .Where(category => category.Name == name)
+                .Where(category => category.status == CategoryEnum.Available && category.Name == name)
                 .FirstOrDefault();
         }
 
-        public async Task<Category> createCategory(Category category)
+        public async Task<CategoryModel> createCategory(CategoryModel categoryModel)
         {
-            if (category == null || category.Name == null)
+            if (categoryModel == null || categoryModel.Name == null)
             {
                 return null;
             }
+
+            Category category = _castService.newCategory(categoryModel);
 
             _context.Categories.Add(category);
 
             await _context.SaveChangesAsync();
 
-            return category;
+            return _castService.newCategoryModel(category);
         }
 
-        public async Task<Category> updateCategory(Category category)
+        public async Task<CategoryModel> updateCategory(CategoryModel categoryModel)
         {
-            if (category.Name == null)
+            if (categoryModel.Name == null)
             {
                 return null;
             }
 
             Category findCategory = _context.Categories
-                .Where(cate => cate.ID == category.ID)
+                .Where(cate => cate.ID == categoryModel.ID)
                 .FirstOrDefault();
 
             if (findCategory == null)
@@ -155,19 +187,20 @@ namespace CustomerMVCSite.Services
                 return null;
             }
 
-            findCategory.Name = category.Name;
-            findCategory.Description = category.Description;
+            findCategory.Name = categoryModel.Name;
+            findCategory.Description = categoryModel.Description;
 
             await _context.SaveChangesAsync();
 
-            return findCategory;
+            return _castService.newCategoryModel(findCategory);
         }
 
         // ====   SubCategory table   ====
-        public List<SubCategory> getSubCategoriesByCategoryID(int id)
+        public List<SubcategoryModel> getSubCategoriesByCategoryID(int id)
         {
             return _context.SubCategories
-                .Where(subCategory => subCategory.Category.ID == id)
+                .Where(subCategory => subCategory.status == CategoryEnum.Available && subCategory.Category.ID == id)
+                .Select(SubCategory => _castService.newSubcategoryModel(SubCategory, id))
                 .ToList();
         }
 
@@ -175,7 +208,7 @@ namespace CustomerMVCSite.Services
         {
             SubCategory subCategory = _context.SubCategories
                 .TagWith("Get subcategory by ID")
-                .Where(sub => sub.ID == id)
+                .Where(sub => sub.status == CategoryEnum.Available && sub.ID == id)
                 .Select(subProp => new SubCategory { ID = subProp.ID, Name = subProp.Name })
                 .FirstOrDefault();
 
@@ -190,14 +223,14 @@ namespace CustomerMVCSite.Services
             {
                 subCategory = _context.SubCategories
                     .TagWith("Get subcategory by Name")
-                    .Where(sub => sub.Name.Equals(name))
+                    .Where(sub => sub.status == CategoryEnum.Available && sub.Name.Equals(name))
                     .FirstOrDefault();
             }
             else
             {
                 subCategory = _context.SubCategories
                     .TagWith("Get subcategory by Name")
-                    .Where(sub => sub.Name.Equals(name))
+                    .Where(sub => sub.status == CategoryEnum.Available && sub.Name.Equals(name))
                     .Select(subProp => new SubCategory
                     {
                         ID = subProp.ID,
@@ -209,15 +242,15 @@ namespace CustomerMVCSite.Services
             return subCategory;
         }
 
-        public async Task<SubCategory> createSubCategory(int CategoryId, SubCategory subCategory)
+        public async Task<SubcategoryModel> createSubCategory(SubcategoryModel subcategoryModel)
         {
-            if (subCategory.Name == null)
+            if (subcategoryModel.Name == null)
             {
                 return null;
             }
 
             Category findCategory = _context.Categories
-                .Where(category => category.ID == CategoryId)
+                .Where(category => category.ID == subcategoryModel.CategoryId)
                 .FirstOrDefault();
 
             if (findCategory == null)
@@ -225,24 +258,26 @@ namespace CustomerMVCSite.Services
                 return null;
             }
 
+            SubCategory subCategory = _castService.newSubCategory(subcategoryModel);
+
             subCategory.Category = findCategory;
 
             _context.SubCategories.Add(subCategory);
 
             await _context.SaveChangesAsync();
 
-            return subCategory;
+            return _castService.newSubcategoryModel(subCategory, findCategory.ID);
         }
 
-        public async Task<SubCategory> updateSubCategory(int CategoryId, SubCategory subCategory)
+        public async Task<SubcategoryModel> updateSubCategory(SubcategoryModel subcategoryModel)
         {
-            if (subCategory.Name == null)
+            if (subcategoryModel.Name == null)
             {
                 return null;
             }
 
             Category findCategory = _context.Categories
-                .Where(category => category.ID == CategoryId)
+                .Where(category => category.ID == subcategoryModel.CategoryId)
                 .FirstOrDefault();
 
             if (findCategory == null)
@@ -251,7 +286,7 @@ namespace CustomerMVCSite.Services
             }
 
             SubCategory findSubcategory = _context.SubCategories
-                .Where(subCate => subCate.ID == subCategory.ID)
+                .Where(subCate => subCate.ID == subcategoryModel.ID)
                 .FirstOrDefault();
 
             if (findSubcategory == null)
@@ -260,18 +295,12 @@ namespace CustomerMVCSite.Services
             }
 
             findSubcategory.Category = findCategory;
-            findSubcategory.Name = subCategory.Name;
-            findSubcategory.Description = subCategory.Description;
+            findSubcategory.Name = subcategoryModel.Name;
+            findSubcategory.Description = subcategoryModel.Description;
 
             await _context.SaveChangesAsync();
 
-            return new SubCategory
-            {
-                ID = findSubcategory.ID,
-                Name = findSubcategory.Name,
-                Description = findSubcategory.Description,
-                Category_ID = findCategory.ID
-            };
+            return _castService.newSubcategoryModel(findSubcategory, findCategory.ID);
         }
     }
 }

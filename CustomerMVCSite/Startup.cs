@@ -46,6 +46,7 @@ namespace CustomerMVCSite
             //services.AddScoped<IUploadService, CloudinaryService>();
             services.AddScoped<IUploadService, LocalUploadService>();
             services.AddScoped<IDatabaseService, DatabaseService>();
+            services.AddScoped<ICastService, CastService>();
             services.AddScoped<eCommerceNetCoreContext>(_ => new eCommerceNetCoreContext());
             services.AddControllersWithViews();
 

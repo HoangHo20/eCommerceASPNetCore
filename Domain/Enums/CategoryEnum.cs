@@ -8,6 +8,7 @@ namespace eCommerceASPNetCore.Domain.Enums
 {
     public enum CategoryEnum
     {
+        Available = 0,
         Deleted = 1
     }
 }

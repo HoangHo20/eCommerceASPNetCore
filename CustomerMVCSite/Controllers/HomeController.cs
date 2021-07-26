@@ -41,8 +41,6 @@ namespace CustomerMVCSite.Controllers
             return View();
         }
 
-        //[Route("/home/subcategory/id")]
-        //[Route("/home/search")]
         [HttpGet]
         public async Task<IActionResult> subcategory(int id, int? page)
         {

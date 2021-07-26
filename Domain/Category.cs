@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using eCommerceASPNetCore.Domain.Enums;
 
 namespace eCommerceASPNetCore.Domain
 {
@@ -21,6 +22,6 @@ namespace eCommerceASPNetCore.Domain
         [JsonIgnore]
         public virtual List<SubCategory> SubCategories { get; set; } = new List<SubCategory>();
 
-        public int status { get; set; }
+        public CategoryEnum status { get; set; }
     }
 }

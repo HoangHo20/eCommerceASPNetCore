@@ -1,4 +1,5 @@
-﻿using CustomerMVCSite.Services.Interface;
+﻿using CustomerMVCSite.Models;
+using CustomerMVCSite.Services.Interface;
 using eCommerceASPNetCore.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -24,71 +25,71 @@ namespace CustomerMVCSite.Controllers
         }
 
         [HttpGet("")]
-        public IEnumerable<Category> Get()
+        public IEnumerable<CategoryModel> Get()
         {
             return _databaseService.getAllCategoryOnly();
         }
 
         [HttpGet("{id}")]
-        public IEnumerable<SubCategory> GetSubcategoryByCategory(int id)
+        public IEnumerable<SubcategoryModel> GetSubcategoryByCategory(int id)
         {
             return _databaseService.getSubCategoriesByCategoryID(id);
         }
 
-        [HttpPost()]
-        public async Task<IActionResult> Post([FromBody] Category category)
+        [HttpPost]
+        public async Task<IActionResult> Post([FromForm] CategoryModel categoryModel)
         {
             try
             {
-                if (category == null)
+                if (categoryModel == null)
                 {
                     _logger.LogError("Category object sent from client is null.");
                     return BadRequest("Category is null");
                 }
 
-                if (_databaseService.getCategoryByName(category.Name) != null)
+                if (_databaseService.getCategoryByName(categoryModel.Name) != null)
                 {
                     _logger.LogError("Category existed or Category's name is null");
                     return BadRequest("Category existed or Category's name is null!");
                 }
 
-                category = await _databaseService.createCategory(category);
+                categoryModel = await _databaseService.createCategory(categoryModel);
 
-                if (category == null)
+                if (categoryModel == null)
                 {
                     _logger.LogError("Category cannot be created.");
                     return BadRequest("Category cannot be created");
                 }
+
+                return Ok(categoryModel);
             } catch (Exception ex)
             {
                 _logger.LogError($"Something went wrong inside Category Post action: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
-
-            return Ok(category);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody]Category category)
+        public async Task<IActionResult> Put(int id, [FromForm] CategoryModel categoryModel)
         {
             try
             {
-                if (category == null)
+                if (categoryModel == null)
                 {
                     _logger.LogError("Category object sent from client is null.");
                     return BadRequest("Category is null");
                 }
 
-                category.ID = id;
-                category = await _databaseService.updateCategory(category);
+                categoryModel.ID = id;
+                categoryModel = await _databaseService.updateCategory(categoryModel);
 
-                if (category == null)
+                if (categoryModel == null)
                 {
                     _logger.LogError("Category cannot be create or Name is empty");
                     return BadRequest("Category cannot be create or Name is empty");
                 }
 
-                return Ok(category);
+                return Ok(categoryModel);
             } catch (Exception ex)
             {
                 _logger.LogError($"Something went wrong inside Category Put action: {ex.Message}");
@@ -117,60 +118,62 @@ namespace CustomerMVCSite.Controllers
         }
 
         [HttpPost("{id}")]
-        public async Task<IActionResult> PostSubcategoryToCategory(int id, [FromBody] SubCategory subCategory)
+        public async Task<IActionResult> PostSubcategoryToCategory(int id, [FromForm] SubcategoryModel subCategoryModel)
         {
             try
             {
-                if (subCategory == null)
+                if (subCategoryModel == null)
                 {
                     _logger.LogError("SubCategory object sent from client is null.");
                     return BadRequest("SubCategory is null");
                 }
 
-                if (_databaseService.getSubCategoryByName(subCategory.Name, false) != null)
+                if (_databaseService.getSubCategoryByName(subCategoryModel.Name, false) != null)
                 {
                     _logger.LogError("subCategory existed or subCategory's name is null");
                     return BadRequest("subCategory existed or subCategory's name is null!");
                 }
 
-                subCategory = await _databaseService.createSubCategory(id, subCategory);
+                subCategoryModel.CategoryId = id;
+                subCategoryModel = await _databaseService.createSubCategory(subCategoryModel);
 
-                if (subCategory == null)
+                if (subCategoryModel == null)
                 {
                     _logger.LogError("subCategory cannot create or Category is not exist");
                     return BadRequest("subCategory cannot create or Category is not exist");
                 }
+
+                return Ok(subCategoryModel);
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Something went wrong inside subCategory Post action: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
-
-            return Ok(subCategory);
         }
 
         [HttpPut("{id}/subcategory/{subId}")]
-        public async Task<IActionResult> PutSubcategoryToCategory(int id, int subId, [FromBody] SubCategory subCategory)
+        public async Task<IActionResult> PutSubcategoryToCategory(int id, int subId, [FromForm] SubcategoryModel subCategoryModel)
         {
             try
             {
-                if (subCategory == null)
+                if (subCategoryModel == null)
                 {
                     _logger.LogError("subCategory object sent from client is null.");
                     return BadRequest("subCategory is null");
                 }
 
-                subCategory.ID = subId;
-                subCategory = await _databaseService.updateSubCategory(id, subCategory);
+                subCategoryModel.ID = subId;
+                subCategoryModel.CategoryId = id;
+                subCategoryModel = await _databaseService.updateSubCategory(subCategoryModel);
 
-                if (subCategory == null)
+                if (subCategoryModel == null)
                 {
                     _logger.LogError("subCategory cannot be update or Category is not exist.");
                     return BadRequest("subCategory cannot be update or Category is not exist.");
                 }
 
-                return Ok(subCategory);
+                return Ok(subCategoryModel);
             }
             catch (Exception ex)
             {

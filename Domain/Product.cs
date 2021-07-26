@@ -1,4 +1,5 @@
-﻿using System;
+﻿using eCommerceASPNetCore.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -20,15 +21,12 @@ namespace eCommerceASPNetCore.Domain
 
         public int Stock { get; set; }
 
-        public int Status { get; set; }
+        public ProductEnum Status { get; set; }
 
         [JsonIgnore]
         public virtual List<ProductImage> Images { get; set; } = new List<ProductImage>();
 
         [JsonIgnore]
         public virtual SubCategory SubCategory { get; set; }
-
-        [NotMapped]
-        public int SubCategory_ID { get; set; }
     }
 }
