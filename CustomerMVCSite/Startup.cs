@@ -48,6 +48,14 @@ namespace CustomerMVCSite
             services.AddScoped<IDatabaseService, DatabaseService>();
             services.AddScoped<ICastService, CastService>();
             services.AddScoped<eCommerceNetCoreContext>(_ => new eCommerceNetCoreContext());
+
+            services.AddCors(options => options.AddPolicy("CorsMyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+
             services.AddControllersWithViews();
 
             // Web Api
@@ -79,6 +87,9 @@ namespace CustomerMVCSite
             //{
             //    app.UseExceptionHandler("/Home/Error");
             //}
+
+            app.UseCors("CorsMyPolicy");
+
             app.UseStaticFiles();
 
             app.UseRouting();

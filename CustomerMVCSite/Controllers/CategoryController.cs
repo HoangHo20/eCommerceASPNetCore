@@ -30,13 +30,32 @@ namespace CustomerMVCSite.Controllers
             return _databaseService.getAllCategoryOnly();
         }
 
+
+        [HttpGet("name/{name}")]
+        public IActionResult GetCategoryByName(string name)
+        {
+            if (name == null)
+            {
+                _logger.LogError("Category object sent from client is null.");
+                return BadRequest("Category's Name is null");
+            }
+
+            return Ok(_databaseService.getCategoryByName(name));
+        }
+
         [HttpGet("{id}")]
+        public IActionResult GetCategoryByCategory(int id)
+        {
+            return Ok(_databaseService.getCategoryByID(id));
+        }
+
+        [HttpGet("{id}/subcategory")]
         public IEnumerable<SubcategoryModel> GetSubcategoryByCategory(int id)
         {
             return _databaseService.getSubCategoriesByCategoryID(id);
         }
 
-        [HttpPost]
+        [HttpPost()]
         public async Task<IActionResult> Post([FromForm] CategoryModel categoryModel)
         {
             try

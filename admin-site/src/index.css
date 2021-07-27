@@ -1,0 +1,35 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.justify-content-center {
+  display: flex;
+  justify-content: center;
+}
+
+.react-table .react-table-row:hover {
+  background-color: #212529;
+  color: #FFFF;
+}
+
+.react-table .react-table-row:not(:hover) button {
+  visibility: hidden;
+}
+
+.react-table .react-table-row:hover button {
+  visibility: visible;
+}
+
+.react-table-row-action {
+  margin: 0 .25rem
+}

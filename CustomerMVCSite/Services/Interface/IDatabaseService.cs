@@ -24,7 +24,8 @@ namespace CustomerMVCSite.Services.Interface
         public List<CategoryModel> getAllCategoryOnly();
         public List<Category> getAllCategoriesWithSubCategories();
         public List<Category> getAllCategory(bool isGetSubcategories, bool isGetProducts);
-        public Category getCategoryByName(string name);
+        public CategoryModel getCategoryByName(string name);
+        public CategoryModel getCategoryByID(int id);
         public Task<CategoryModel> createCategory(CategoryModel category);
         public Task<CategoryModel> updateCategory(CategoryModel category);
 

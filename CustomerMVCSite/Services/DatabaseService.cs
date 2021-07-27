@@ -143,7 +143,7 @@ namespace CustomerMVCSite.Services
                 .ToList();
         }
 
-        public Category getCategoryByName(string name)
+        public CategoryModel getCategoryByName(string name)
         {
             if (name == null)
             {
@@ -152,6 +152,15 @@ namespace CustomerMVCSite.Services
 
             return _context.Categories
                 .Where(category => category.status == CategoryEnum.Available && category.Name == name)
+                .Select(category => _castService.newCategoryModel(category))
+                .FirstOrDefault();
+        }
+
+        public CategoryModel getCategoryByID(int id)
+        {
+            return _context.Categories
+                .Where(cate => cate.status == CategoryEnum.Available && cate.ID == id)
+                .Select(cate => _castService.newCategoryModel(cate))
                 .FirstOrDefault();
         }
 
