@@ -124,14 +124,16 @@ export default class index extends Component {
                 placeholder="Category's name should be unique"
                 value={this.state.Name}
                 onChange={e => this.handleChange(e)}
-                invalid />
+                invalid 
+                required/>
         } else {
             nameInput = <Input type="text"
                 name="Name"
                 id="categoryName"
                 placeholder="Category's name should be unique"
                 value={this.state.Name}
-                onChange={e => this.handleChange(e)} />
+                onChange={e => this.handleChange(e)} 
+                required/>
         }
 
         let message = <></>;

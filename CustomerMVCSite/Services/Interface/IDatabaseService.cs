@@ -31,7 +31,7 @@ namespace CustomerMVCSite.Services.Interface
 
         // SubCategory table
         public List<SubcategoryModel> getSubCategoriesByCategoryID(int id);
-        public SubCategory getSubCategoryByID(int id, bool isGetProducts = false);
+        public SubcategoryModel getSubCategoryByID(int id);
         public SubCategory getSubCategoryByName(string name, bool isGetProducts = false);
         public Task<SubcategoryModel> createSubCategory(SubcategoryModel subCategory);
         public Task<SubcategoryModel> updateSubCategory(SubcategoryModel subCategory);

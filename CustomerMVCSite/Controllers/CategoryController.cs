@@ -49,12 +49,6 @@ namespace CustomerMVCSite.Controllers
             return Ok(_databaseService.getCategoryByID(id));
         }
 
-        [HttpGet("{id}/subcategory")]
-        public IEnumerable<SubcategoryModel> GetSubcategoryByCategory(int id)
-        {
-            return _databaseService.getSubCategoriesByCategoryID(id);
-        }
-
         [HttpPost()]
         public async Task<IActionResult> Post([FromForm] CategoryModel categoryModel)
         {
@@ -122,21 +116,13 @@ namespace CustomerMVCSite.Controllers
             return Ok();
         }
 
-        [HttpGet("{id}/subcategory/{subId}")]
-        public IEnumerable<Product> GetProductsBySubcategory(int id, int subId)
+        [HttpGet("{id}/subcategory")]
+        public IEnumerable<SubcategoryModel> GetSubcategoryByCategory(int id)
         {
-            return _databaseService.getProductsBySubcategoryID(subId)
-                .Select(product => new Product
-                {
-                    ID = product.ID,
-                    Name = product.Name,
-                    Stock = product.Stock,
-                    Price = product.Price
-                })
-                .ToList();
+            return _databaseService.getSubCategoriesByCategoryID(id);
         }
 
-        [HttpPost("{id}")]
+        [HttpPost("{id}/subcategory")]
         public async Task<IActionResult> PostSubcategoryToCategory(int id, [FromForm] SubcategoryModel subCategoryModel)
         {
             try
@@ -145,12 +131,6 @@ namespace CustomerMVCSite.Controllers
                 {
                     _logger.LogError("SubCategory object sent from client is null.");
                     return BadRequest("SubCategory is null");
-                }
-
-                if (_databaseService.getSubCategoryByName(subCategoryModel.Name, false) != null)
-                {
-                    _logger.LogError("subCategory existed or subCategory's name is null");
-                    return BadRequest("subCategory existed or subCategory's name is null!");
                 }
 
                 subCategoryModel.CategoryId = id;
@@ -169,6 +149,12 @@ namespace CustomerMVCSite.Controllers
                 _logger.LogError($"Something went wrong inside subCategory Post action: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
+        }
+
+        [HttpGet("subcategory/{subId}")]
+        public IActionResult getSubcategoryById(int subId)
+        {
+            return Ok(_databaseService.getSubCategoryByID(subId));
         }
 
         [HttpPut("{id}/subcategory/{subId}")]
@@ -199,6 +185,20 @@ namespace CustomerMVCSite.Controllers
                 _logger.LogError($"Something went wrong inside Category Put action: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
+        }
+
+        [HttpGet("{id}/subcategory/{subId}/product")]
+        public IEnumerable<Product> GetProductsBySubcategory(int id, int subId)
+        {
+            return _databaseService.getProductsBySubcategoryID(subId)
+                .Select(product => new Product
+                {
+                    ID = product.ID,
+                    Name = product.Name,
+                    Stock = product.Stock,
+                    Price = product.Price
+                })
+                .ToList();
         }
     }
 }

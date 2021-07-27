@@ -4,6 +4,9 @@ import Navbar from './Navbar'
 import CategoryCreate from './Category/CategoryCreate'
 import CategoryModify from './Category/CategoryModify'
 import CategoryModifyItem from './Category/CategoryModifyItem.js'
+import SubcategoryCreate from './Subcategory/SubcategoryCreate.js'
+import SubcategoryModify from './Subcategory/SubcategoryModify.js'
+import SubcategoryModifyItem from './Subcategory/SubcategoryModifyItem.js'
 
 export default class Admin extends Component {
     render() {
@@ -20,6 +23,15 @@ export default class Admin extends Component {
                     </Route>
                     <Route exact path="/category/modify/:id">
                         <CategoryModifyItem />
+                    </Route>
+                    <Route exact path="/subcategory/create">
+                        <SubcategoryCreate/>
+                    </Route>
+                    <Route exact path="/subcategory/modify/">
+                        <SubcategoryModify />
+                    </Route>
+                    <Route exact path="/subcategory/modify/:id">
+                        <SubcategoryModifyItem />
                     </Route>
                 </Switch>
             </Router>

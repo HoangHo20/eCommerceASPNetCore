@@ -213,15 +213,14 @@ namespace CustomerMVCSite.Services
                 .ToList();
         }
 
-        public SubCategory getSubCategoryByID(int id, bool isGetProducts = false)
+        public SubcategoryModel getSubCategoryByID(int id)
         {
-            SubCategory subCategory = _context.SubCategories
+            return _context.SubCategories
                 .TagWith("Get subcategory by ID")
                 .Where(sub => sub.status == CategoryEnum.Available && sub.ID == id)
-                .Select(subProp => new SubCategory { ID = subProp.ID, Name = subProp.Name })
+                .Include(sub => sub.Category)
+                .Select(sub => _castService.newSubcategoryModel(sub, sub.Category.ID))
                 .FirstOrDefault();
-
-            return subCategory;
         }
 
         public SubCategory getSubCategoryByName(string name, bool isGetProducts = false)
