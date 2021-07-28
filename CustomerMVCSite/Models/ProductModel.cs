@@ -24,6 +24,6 @@ namespace CustomerMVCSite.Models
 
         public List<string> ImageUrls { get; set; }
 
-        public List<IFormFile> imageFiles { get; set; }
+        public List<IFormFile> Files { get; set; } 
     }
 }

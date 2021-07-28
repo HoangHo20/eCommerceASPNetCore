@@ -7,6 +7,8 @@ import CategoryModifyItem from './Category/CategoryModifyItem.js'
 import SubcategoryCreate from './Subcategory/SubcategoryCreate.js'
 import SubcategoryModify from './Subcategory/SubcategoryModify.js'
 import SubcategoryModifyItem from './Subcategory/SubcategoryModifyItem.js'
+import ProductCreate from './Product/ProductCreate.js'
+import ProductModify from './Product/ProductModify.js'
 
 export default class Admin extends Component {
     render() {
@@ -32,6 +34,12 @@ export default class Admin extends Component {
                     </Route>
                     <Route exact path="/subcategory/modify/:id">
                         <SubcategoryModifyItem />
+                    </Route>
+                    <Route exact path="/product/create">
+                        <ProductCreate />
+                    </Route>
+                    <Route exact path="/product/modify">
+                        <ProductModify />
                     </Route>
                 </Switch>
             </Router>

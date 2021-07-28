@@ -108,7 +108,7 @@ export default function SubcategoryCreate() {
                         <Input type="text"
                             name="Name"
                             id="categoryName"
-                            placeholder="Category's name should be unique"
+                            placeholder="Enter subcategory name"
                             value={name}
                             onChange={e => handleInputEvent(e)}
                             required />

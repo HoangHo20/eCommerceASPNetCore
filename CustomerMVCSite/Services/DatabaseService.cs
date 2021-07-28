@@ -116,6 +116,42 @@ namespace CustomerMVCSite.Services
             return product.ID;
         }
 
+        public async Task<ProductModel> createProduct(ProductModel productModel)
+        {
+            Product newProduct = _castService.newProduct(productModel);
+
+            if (productModel.ImageUrls == null)
+            {
+                return null;
+            }
+
+            SubCategory findSubcategory = _context.SubCategories
+                .Where(subCate => subCate.status == CategoryEnum.Available && subCate.ID == productModel.SubcategoryId)
+                .FirstOrDefault();
+
+            if (findSubcategory == null)
+            {
+                return null;
+            }
+
+            foreach (string url in productModel.ImageUrls)
+            {
+                newProduct.Images.Add(new ProductImage
+                {
+                    Url = url
+                });
+            }
+
+            newProduct.SubCategory = findSubcategory;
+
+            _context.Products.Add(newProduct);
+            _context.Entry(findSubcategory).State = EntityState.Modified;
+
+            await _context.SaveChangesAsync();
+
+            return _castService.newProductModel(newProduct, false, findSubcategory.ID, null, -1);
+        }
+
         // ====   Category table   ====
         public List<CategoryModel> getAllCategoryOnly()
         {

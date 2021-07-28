@@ -19,6 +19,7 @@ namespace CustomerMVCSite.Services.Interface
         public IQueryable<Product> getProductsBySubcategoryID(int subcategoryId);
         public int createProduct(Product product);
         public int createProduct(Product product, SubCategory subCategory, List<string> imageUrls);
+        public Task<ProductModel> createProduct(ProductModel productModel);
 
         // Category table
         public List<CategoryModel> getAllCategoryOnly();

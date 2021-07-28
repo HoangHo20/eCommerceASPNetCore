@@ -16,12 +16,15 @@ namespace CustomerMVCSite.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IDatabaseService _databaseService;
+        private readonly ICastService _castService;
 
         public CategoryController(ILogger<HomeController> logger,
-            IDatabaseService databaseService)
+            IDatabaseService databaseService,
+            ICastService castService)
         {
             _logger = logger;
             _databaseService = databaseService;
+            _castService = castService;
         }
 
         [HttpGet("")]
@@ -187,17 +190,11 @@ namespace CustomerMVCSite.Controllers
             }
         }
 
-        [HttpGet("{id}/subcategory/{subId}/product")]
-        public IEnumerable<Product> GetProductsBySubcategory(int id, int subId)
+        [HttpGet("subcategory/{subId}/product")]
+        public IEnumerable<ProductModel> GetProductsBySubcategory(int subId)
         {
             return _databaseService.getProductsBySubcategoryID(subId)
-                .Select(product => new Product
-                {
-                    ID = product.ID,
-                    Name = product.Name,
-                    Stock = product.Stock,
-                    Price = product.Price
-                })
+                .Select(product => _castService.newProductModel(product, false, -1, null, -1))
                 .ToList();
         }
     }
