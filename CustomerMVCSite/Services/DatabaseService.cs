@@ -152,6 +152,31 @@ namespace CustomerMVCSite.Services
             return _castService.newProductModel(newProduct, false, findSubcategory.ID, null, -1);
         }
 
+        public async Task<bool> deleteProduct(int id)
+        {
+            try
+            {
+                Product findProduct = _context.Products
+                .Where(prod => prod.Status == ProductEnum.Available && prod.ID == id)
+                .Include(prod => prod.Images)
+                .FirstOrDefault();
+
+                if (findProduct == null)
+                {
+                    return false;
+                }
+
+                findProduct.Status = ProductEnum.Deleted;
+
+                await _context.SaveChangesAsync();
+
+                return true;
+            } catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
         // ====   Category table   ====
         public List<CategoryModel> getAllCategoryOnly()
         {
@@ -165,16 +190,16 @@ namespace CustomerMVCSite.Services
         {
             return _context.Categories
                     .Where(category => category.status == CategoryEnum.Available)
-                    .Include(category => category.SubCategories)
+                    .Include(category => category.SubCategories.Where(subcate => subcate.status == CategoryEnum.Available))
                     .ToList();
         }
 
         public List<Category> getAllCategory(bool isGetSubcategories = false, bool isGetProducts = false)
         {
             return _context.Categories
-                .Where(category => category.status == CategoryEnum.Available)
-                .Include(category => category.SubCategories)
-                    .ThenInclude(subcategory => subcategory.Products)
+                .Where(cate => cate.status == CategoryEnum.Available)
+                .Include(category => category.SubCategories.Where(subcate => subcate.status == CategoryEnum.Available))
+                    .ThenInclude(subcategory => subcategory.Products.Where(prod => prod.Status == ProductEnum.Available))
                         .ThenInclude(product => product.Images)
                 .ToList();
         }
@@ -224,7 +249,7 @@ namespace CustomerMVCSite.Services
             }
 
             Category findCategory = _context.Categories
-                .Where(cate => cate.ID == categoryModel.ID)
+                .Where(cate => cate.status == CategoryEnum.Available && cate.ID == categoryModel.ID)
                 .FirstOrDefault();
 
             if (findCategory == null)
@@ -238,6 +263,42 @@ namespace CustomerMVCSite.Services
             await _context.SaveChangesAsync();
 
             return _castService.newCategoryModel(findCategory);
+        }
+
+        public async Task<bool> deleteCategory(int id)
+        {
+            try
+            {
+                Category findCategory = _context.Categories
+                .Where(cate => cate.status == CategoryEnum.Available && cate.ID == id)
+                .Include(cate => cate.SubCategories.Where(sub => sub.status == CategoryEnum.Available))
+                    .ThenInclude(subcategory => subcategory.Products.Where(pro => pro.Status == ProductEnum.Available))
+                .FirstOrDefault();
+
+                if (findCategory == null)
+                {
+                    return false;
+                }
+
+                findCategory.status = CategoryEnum.Deleted;
+
+                foreach (SubCategory subcate in findCategory.SubCategories)
+                {
+                    subcate.status = CategoryEnum.Deleted;
+
+                    foreach (Product prod in subcate.Products)
+                    {
+                        prod.Status = ProductEnum.Deleted;
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+
+                return true;
+            } catch(Exception e)
+            {
+                return false;
+            }
         }
 
         // ====   SubCategory table   ====
@@ -294,7 +355,7 @@ namespace CustomerMVCSite.Services
             }
 
             Category findCategory = _context.Categories
-                .Where(category => category.ID == subcategoryModel.CategoryId)
+                .Where(category => category.status == CategoryEnum.Available && category.ID == subcategoryModel.CategoryId)
                 .FirstOrDefault();
 
             if (findCategory == null)
@@ -321,7 +382,7 @@ namespace CustomerMVCSite.Services
             }
 
             Category findCategory = _context.Categories
-                .Where(category => category.ID == subcategoryModel.CategoryId)
+                .Where(category => category.status == CategoryEnum.Available && category.ID == subcategoryModel.CategoryId)
                 .FirstOrDefault();
 
             if (findCategory == null)
@@ -330,7 +391,7 @@ namespace CustomerMVCSite.Services
             }
 
             SubCategory findSubcategory = _context.SubCategories
-                .Where(subCate => subCate.ID == subcategoryModel.ID)
+                .Where(subCate => subCate.status == CategoryEnum.Available && subCate.ID == subcategoryModel.ID)
                 .FirstOrDefault();
 
             if (findSubcategory == null)
@@ -345,6 +406,36 @@ namespace CustomerMVCSite.Services
             await _context.SaveChangesAsync();
 
             return _castService.newSubcategoryModel(findSubcategory, findCategory.ID);
+        }
+
+        public async Task<bool> deleteSubcategory(int id)
+        {
+            try
+            {
+                SubCategory findSubcategory = _context.SubCategories
+                .Where(sub => sub.status == CategoryEnum.Available && sub.ID == id)
+                .Include(sub => sub.Products)
+                .FirstOrDefault();
+
+                if (findSubcategory == null)
+                {
+                    return false;
+                }
+
+                findSubcategory.status = CategoryEnum.Deleted;
+
+                foreach (Product p in findSubcategory.Products)
+                {
+                    p.Status = ProductEnum.Deleted;
+                }
+
+                await _context.SaveChangesAsync();
+
+                return true;
+            } catch(Exception Ignored)
+            {
+                return false;
+            }
         }
     }
 }

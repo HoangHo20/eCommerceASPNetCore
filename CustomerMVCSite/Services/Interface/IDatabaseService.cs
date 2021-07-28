@@ -20,6 +20,7 @@ namespace CustomerMVCSite.Services.Interface
         public int createProduct(Product product);
         public int createProduct(Product product, SubCategory subCategory, List<string> imageUrls);
         public Task<ProductModel> createProduct(ProductModel productModel);
+        public Task<bool> deleteProduct(int id);
 
         // Category table
         public List<CategoryModel> getAllCategoryOnly();
@@ -29,6 +30,7 @@ namespace CustomerMVCSite.Services.Interface
         public CategoryModel getCategoryByID(int id);
         public Task<CategoryModel> createCategory(CategoryModel category);
         public Task<CategoryModel> updateCategory(CategoryModel category);
+        public Task<bool> deleteCategory(int id);
 
         // SubCategory table
         public List<SubcategoryModel> getSubCategoriesByCategoryID(int id);
@@ -36,5 +38,6 @@ namespace CustomerMVCSite.Services.Interface
         public SubCategory getSubCategoryByName(string name, bool isGetProducts = false);
         public Task<SubcategoryModel> createSubCategory(SubcategoryModel subCategory);
         public Task<SubcategoryModel> updateSubCategory(SubcategoryModel subCategory);
+        public Task<bool> deleteSubcategory(int id);
     }
 }

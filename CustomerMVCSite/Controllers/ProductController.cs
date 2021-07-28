@@ -71,5 +71,17 @@ namespace CustomerMVCSite.Controllers
                 return Ok(productModel);
             }
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> deleteProduct(int id)
+        {
+            if (await _databaseService.deleteProduct(id))
+            {
+                return Ok(new ProductModel{ ID = id });
+            } else
+            {
+                return BadRequest($"Cannot delete Product");
+            }
+        }
     }
 }

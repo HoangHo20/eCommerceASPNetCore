@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, Redirect, useParams } from 'react-router-dom'
 import { Container, Table, Alert, Button, Spinner, FormGroup, Label, Col, Input } from 'reactstrap'
-import { aGet } from '../../utils/httpHelpers';
+import { aDelete, aGet } from '../../utils/httpHelpers';
 
 export default function ProductModify() {
     const [isLoading, setIsLoading] = useState(false);
@@ -74,6 +74,27 @@ export default function ProductModify() {
             })
     }
 
+    function deleteProduct(id) {
+        setIsLoading(true);
+
+        aDelete(`Product/${id}`)
+        .then(response => {
+            if (response.data) {
+                let deletedID = response.data.id;
+                let deletedProduct = products.find(p => p.id === deletedID);
+
+                setMessage(`Delete (${deletedProduct.name}) completed`);
+                setProducts(products.filter(prod => prod !== deletedProduct));
+            }
+        })
+        .catch(error => {
+            setMessage('Cannot delete the product');
+        })
+        .finally(() => {
+            setIsLoading(false);
+        })
+    }
+
     function onMessageDismiss() {
         setMessage('');
     }
@@ -92,6 +113,15 @@ export default function ProductModify() {
         setSelectSubcategoryId(event.target.value)
 
         getProductsBySubcategoryId(event.target.value);
+    }
+
+    function onDeleteClick(productID) {
+        let selectProduct = products.find(prod => prod.id === productID);
+
+        if (window.confirm(`Are you sure delete (${selectProduct.name})?`)) {
+            // confirm delete
+            deleteProduct(productID);
+          }
     }
 
     function productTable() {
@@ -120,7 +150,12 @@ export default function ProductModify() {
                                     <Link to={`/product/modify/${prd.id}`}>
                                         <Button color='info' className="react-table-row-action" >Edit</Button>
                                     </Link>
-                                    <Button color='danger' className="react-table-row-action">Delete</Button>
+                                    <Button
+                                        color='danger'
+                                        className="react-table-row-action"
+                                        onClick={() => onDeleteClick(prd.id)} >
+                                        Delete
+                                    </Button>
                                 </td>
                             </tr>
                         ))

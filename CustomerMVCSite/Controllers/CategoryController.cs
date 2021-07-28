@@ -114,9 +114,17 @@ namespace CustomerMVCSite.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return Ok();
+            if (await _databaseService.deleteCategory(id))
+            {
+                return Ok(new CategoryModel
+                {
+                    ID = id
+                });
+            }
+
+            return BadRequest("Cannot delete Category");
         }
 
         [HttpGet("{id}/subcategory")]
@@ -158,6 +166,20 @@ namespace CustomerMVCSite.Controllers
         public IActionResult getSubcategoryById(int subId)
         {
             return Ok(_databaseService.getSubCategoryByID(subId));
+        }
+
+        [HttpDelete("subcategory/{subId}")]
+        public async Task<IActionResult> deleteSubcategoryById(int subId)
+        {
+            if (await _databaseService.deleteSubcategory(subId))
+            {
+                return Ok(new SubcategoryModel
+                {
+                    ID = subId
+                });
+            }
+
+            return BadRequest("Cannot delete Subcategory");
         }
 
         [HttpPut("{id}/subcategory/{subId}")]
