@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import { Container, Table, Alert, Button, Spinner } from 'reactstrap'
 import {
+    aDelete,
     aPost
 } from '../../../utils/httpHelpers'
 import {
@@ -11,7 +12,8 @@ import {
 export default class index extends Component {
     state = {
         categories: [],
-        isLoading: true
+        isLoading: true,
+        message: ''
     }
 
     popLoading(callback) {
@@ -37,6 +39,35 @@ export default class index extends Component {
             })
     }
 
+    deleteCategory(id) {
+        this.setState({
+            isLoading: true,
+        });
+
+        aDelete(`Category/${id}`)
+            .then(response => {
+                if (response.data) {
+                    let deletedID = response.data.id;
+                    let deletedCate = this.state.categories.find(c => c.id === deletedID);
+
+                    this.setState({
+                        message: `Delete (${deletedCate.name}) completed`,
+                        categories: this.state.categories.filter(cate => cate !== deletedCate)
+                    })
+                }
+            })
+            .catch(error => {
+                this.setState({
+                    message: 'Delete category error'
+                })
+            })
+            .finally(() => {
+                this.setState({
+                    isLoading: false
+                })
+            })
+    }
+
     componentDidMount() {
         this.getAllCategories()
     }
@@ -49,6 +80,23 @@ export default class index extends Component {
                 pathname: "/create",
             }}
         />
+    }
+
+    onDeleteClick(id) {
+        console.log(id);
+
+        let getDeleteSubSelect = this.state.categories.find(cate => cate.id === id);
+
+        if (window.confirm(`Are you sure delete (${getDeleteSubSelect.name})?`)) {
+            // confirm delete
+            this.deleteCategory(id);
+        }
+    }
+
+    onMessageDismiss() {
+        this.setState({
+            message: ''
+        })
     }
 
     categoryTable() {
@@ -73,7 +121,12 @@ export default class index extends Component {
                                     <Link to={`/category/modify/${category.id}`}>
                                         <Button color='info' className="react-table-row-action" >Edit</Button>
                                     </Link>
-                                    <Button color='danger' className="react-table-row-action">Delete</Button>
+                                    <Button
+                                        color='danger'
+                                        className="react-table-row-action"
+                                        onClick={() => this.onDeleteClick(category.id)} >
+                                        Delete
+                                    </Button>
                                 </td>
                             </tr>
                         ))
@@ -87,6 +140,13 @@ export default class index extends Component {
         return (
             <Container className='mt-5'>
                 <h1 className="justify-content-center">Click a category to edit</h1>
+
+                {
+                    this.state.message.length > 0 &&
+                    <Alert color="success" isOpen={true} toggle={() => this.onMessageDismiss()}>
+                        {this.state.message}
+                    </Alert>
+                }
 
                 {
                     this.state.isLoading ?

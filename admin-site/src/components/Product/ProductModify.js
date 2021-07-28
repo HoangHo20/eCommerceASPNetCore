@@ -78,21 +78,21 @@ export default function ProductModify() {
         setIsLoading(true);
 
         aDelete(`Product/${id}`)
-        .then(response => {
-            if (response.data) {
-                let deletedID = response.data.id;
-                let deletedProduct = products.find(p => p.id === deletedID);
+            .then(response => {
+                if (response.data) {
+                    let deletedID = response.data.id;
+                    let deletedProduct = products.find(p => p.id === deletedID);
 
-                setMessage(`Delete (${deletedProduct.name}) completed`);
-                setProducts(products.filter(prod => prod !== deletedProduct));
-            }
-        })
-        .catch(error => {
-            setMessage('Cannot delete the product');
-        })
-        .finally(() => {
-            setIsLoading(false);
-        })
+                    setMessage(`Delete (${deletedProduct.name}) completed`);
+                    setProducts(products.filter(prod => prod !== deletedProduct));
+                }
+            })
+            .catch(error => {
+                setMessage('Cannot delete the product');
+            })
+            .finally(() => {
+                setIsLoading(false);
+            })
     }
 
     function onMessageDismiss() {
@@ -121,7 +121,7 @@ export default function ProductModify() {
         if (window.confirm(`Are you sure delete (${selectProduct.name})?`)) {
             // confirm delete
             deleteProduct(productID);
-          }
+        }
     }
 
     function productTable() {

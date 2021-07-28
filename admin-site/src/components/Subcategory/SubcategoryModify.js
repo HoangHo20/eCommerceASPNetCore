@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, Redirect, useParams } from 'react-router-dom'
 import { Container, Table, Alert, Button, Spinner, FormGroup, Label, Col, Input } from 'reactstrap'
-import { aGet } from '../../utils/httpHelpers';
+import { aGet, aDelete } from '../../utils/httpHelpers';
 
 export default function SubcategoryModify() {
     const [isLoading, setIsLoading] = useState(false);
@@ -25,8 +25,8 @@ export default function SubcategoryModify() {
                     setMessage('No category found');
                 } else {
                     setCategories(response.data);
-                    setSelectCateId(1);
-                    getSubcategoryByCategoryId(1);
+                    setSelectCateId(response.data[0].id);
+                    getSubcategoryByCategoryId(response.data[0].id);
                 }
             })
             .catch(error => {
@@ -41,15 +41,36 @@ export default function SubcategoryModify() {
         setIsLoading(true);
 
         aGet(`Category/${id}/subcategory`)
-        .then(response => {
-            setSubcategories(response.data);
-        })
-        .catch(error => {
-            setMessage('Get subcategories list error');
-        })
-        .finally(() => {
-            setIsLoading(false);
-        })
+            .then(response => {
+                setSubcategories(response.data);
+            })
+            .catch(error => {
+                setMessage('Get subcategories list error');
+            })
+            .finally(() => {
+                setIsLoading(false);
+            })
+    }
+
+    function deleteSubcategory(id) {
+        setIsLoading(true);
+
+        aDelete(`Category/subcategory/${id}`)
+            .then(response => {
+                if (response.data) {
+                    let deletedID = response.data.id;
+                    let deletedSubCate = subcategories.find(s => s.id === deletedID);
+
+                    setMessage(`Delete (${deletedSubCate.name}) completed`);
+                    setSubcategories(subcategories.filter(sub => sub !== deletedSubCate));
+                }
+            })
+            .catch(error => {
+                setMessage('Cannot delete the product');
+            })
+            .finally(() => {
+                setIsLoading(false);
+            })
     }
 
     function onMessageDismiss() {
@@ -64,6 +85,17 @@ export default function SubcategoryModify() {
 
     function onSelectCategory(event) {
         selectCategory(event.target.value);
+    }
+
+    function onDeleteClick(id) {
+        console.log(id);
+
+        let getDeleteSubSelect = subcategories.find(prod => prod.id === id);
+
+        if (window.confirm(`Are you sure delete (${getDeleteSubSelect.name})?`)) {
+            // confirm delete
+            deleteSubcategory(id);
+        }
     }
 
     function subcategoryTable() {
@@ -88,7 +120,12 @@ export default function SubcategoryModify() {
                                     <Link to={`/subcategory/modify/${subCate.id}`}>
                                         <Button color='info' className="react-table-row-action" >Edit</Button>
                                     </Link>
-                                    <Button color='danger' className="react-table-row-action">Delete</Button>
+                                    <Button
+                                        color='danger'
+                                        className="react-table-row-action"
+                                        onClick={() => onDeleteClick(subCate.id)} >
+                                        Delete
+                                    </Button>
                                 </td>
                             </tr>
                         ))
