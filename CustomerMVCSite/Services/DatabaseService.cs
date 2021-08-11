@@ -102,15 +102,12 @@ namespace CustomerMVCSite.Services
 
             if (subCategory != null)
             {
-                using (var context = new eCommerceNetCoreContext())
-                {
-                    product.SubCategory = subCategory;
+                product.SubCategory = subCategory;
 
-                    context.Products.Add(product);
+                _context.Products.Add(product);
 
-                    context.Entry(subCategory).State = EntityState.Modified;
-                    context.SaveChanges();
-                }
+                _context.Entry(subCategory).State = EntityState.Modified;
+                _context.SaveChanges();
             }
 
             return product.ID;
@@ -199,7 +196,7 @@ namespace CustomerMVCSite.Services
             return _context.Categories
                 .Where(cate => cate.status == CategoryEnum.Available)
                 .Include(category => category.SubCategories.Where(subcate => subcate.status == CategoryEnum.Available))
-                    .ThenInclude(subcategory => subcategory.Products.Where(prod => prod.Status == ProductEnum.Available))
+                    .ThenInclude(subcategory => subcategory.Products.Where(prod => prod.Status == ProductEnum.Available).Take(6))
                         .ThenInclude(product => product.Images)
                 .ToList();
         }

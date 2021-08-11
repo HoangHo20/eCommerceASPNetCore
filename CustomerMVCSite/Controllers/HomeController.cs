@@ -11,6 +11,7 @@ using eCommerceASPNetCore.Domain;
 using Microsoft.Extensions.Options;
 using CustomerMVCSite.Options;
 using eCommerceASPNetCore.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CustomerMVCSite.Controllers
 {
@@ -40,7 +41,7 @@ namespace CustomerMVCSite.Controllers
         {
             return View();
         }
-
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> subcategory(int id, int? page)
         {

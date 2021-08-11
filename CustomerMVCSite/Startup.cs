@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -41,17 +43,50 @@ namespace CustomerMVCSite
             services.Configure<LocalUploadOptions>(
                 Configuration.GetSection("LocalUpload"));
 
+            //services.AddIdentity<IdentityUser, Role>()
+            //    .AddUserStore<UserStore>()
+            //    .AddRoleStore<RoleStore>()
+            //    .AddDefaultTokenProviders();
+
+            //services.AddMemoryCache();
+            //services.AddDistributedMemoryCache();
+            //services.AddDbContext<IdentityServerDb>
+            //    (options => options.UseSqlServer(Configuration.GetConnectionString("IdentityServerDb")));
+
+
+            // Authentication
+            services.AddAuthentication(auth =>
+            {
+                auth.DefaultScheme = "Cookies";
+                auth.DefaultChallengeScheme = "oidc";
+            })
+                .AddCookie("Cookies", options =>
+                {
+                    options.Cookie.IsEssential = true;
+                })
+                .AddOpenIdConnect("oidc", opt =>
+                {
+                    opt.SignInScheme = "Cookies";
+                    opt.Authority = "https://localhost:5005";
+                    opt.ClientId = "mvc-client";
+                    opt.ResponseType = "code";
+                    opt.SaveTokens = true;
+                    opt.ClientSecret = "MVCSecret";
+
+                    opt.RequireHttpsMetadata = false;
+                });
+
             // Services
             //Temporary lock cloudinary
-            //services.AddScoped<IUploadService, CloudinaryService>();
-            services.AddScoped<IUploadService, LocalUploadService>();
+            services.AddScoped<IUploadService, CloudinaryService>();
+            //services.AddScoped<IUploadService, LocalUploadService>();
             services.AddScoped<IDatabaseService, DatabaseService>();
             services.AddScoped<ICastService, CastService>();
-            services.AddScoped<eCommerceNetCoreContext>(_ => new eCommerceNetCoreContext());
+            services.AddScoped<eCommerceNetCoreContext>(_ => new eCommerceNetCoreContext(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddCors(options => options.AddPolicy("CorsMyPolicy", builder =>
             {
-                builder.AllowAnyOrigin()
+                builder.WithOrigins("http://localhost:3000")
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             }));
@@ -63,15 +98,8 @@ namespace CustomerMVCSite
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "coreApi", Version = "v1" });
             });
-
-            // Authentication
-            services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = "Cookie";
-                options.DefaultChallengeScheme = "oidc";
-            })
-                .AddCookie("Cookie");
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -107,6 +135,7 @@ namespace CustomerMVCSite
                 endpoints.MapControllerRoute(
                     name: "api",
                     pattern: "api/{controller}");
+
             });
         }
     }

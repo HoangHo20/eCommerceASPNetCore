@@ -83,5 +83,17 @@ namespace CustomerMVCSite.Controllers
                 return BadRequest($"Cannot delete Product");
             }
         }
+
+        [HttpGet("rim")]
+        public IActionResult GetRim([FromQuery(Name = "state")] List<string> state, [FromQuery(Name = "category")] List<string> category)
+        {
+            return Ok();
+        }
+
+        [HttpGet("ssd/{filter}")]
+        public IActionResult GetRim(FilterAsset filter)
+        {
+            return Ok();
+        }
     }
 }

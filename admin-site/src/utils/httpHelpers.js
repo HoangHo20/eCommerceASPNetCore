@@ -1,8 +1,6 @@
 import axios from "axios";
 
-require('dotenv').config();
-
-const endpoint = 'http://localhost:5000/api/';
+const endpoint = process.env.REACT_APP_ENDPOINT;
 const token = localStorage.getItem("token");
 const requestConfig = {
     headers: {

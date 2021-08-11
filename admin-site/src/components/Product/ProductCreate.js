@@ -58,7 +58,7 @@ export default function ProductCreate() {
     }
 
     function postProduct(event) {
-        if (selectCateId != -1) {
+        if (selectCateId !== -1) {
             setIsLoading(true);
 
             let formData = new FormData();

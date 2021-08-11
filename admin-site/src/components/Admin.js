@@ -9,6 +9,8 @@ import SubcategoryModify from './Subcategory/SubcategoryModify.js'
 import SubcategoryModifyItem from './Subcategory/SubcategoryModifyItem.js'
 import ProductCreate from './Product/ProductCreate.js'
 import ProductModify from './Product/ProductModify.js'
+import Hahahi from './Category/Haha'
+import Delete from './delete';
 
 export default class Admin extends Component {
     render() {
@@ -40,6 +42,12 @@ export default class Admin extends Component {
                     </Route>
                     <Route exact path="/product/modify">
                         <ProductModify />
+                    </Route>
+                    <Route exact path="/haha">
+                        <Hahahi />
+                    </Route>
+                    <Route exact path="/del">
+                        <Delete id={undefined} isVisible={true}></Delete>
                     </Route>
                 </Switch>
             </Router>

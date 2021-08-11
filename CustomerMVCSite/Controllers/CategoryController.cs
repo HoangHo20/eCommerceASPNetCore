@@ -14,11 +14,11 @@ namespace CustomerMVCSite.Controllers
     [Route("api/[controller]")]
     public class CategoryController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<CategoryController> _logger;
         private readonly IDatabaseService _databaseService;
         private readonly ICastService _castService;
 
-        public CategoryController(ILogger<HomeController> logger,
+        public CategoryController(ILogger<CategoryController> logger,
             IDatabaseService databaseService,
             ICastService castService)
         {

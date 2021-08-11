@@ -1,4 +1,5 @@
 using AuthServer.Configuration;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -27,23 +28,49 @@ namespace AuthServer
         {
             var migrationAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
-            services.AddIdentityServer()
-                //.AddInMemoryApiScopes(InMemoryConfig.GetApiScopes())
-                //.AddInMemoryApiResources(InMemoryConfig.GetApiResources())
-                //.AddInMemoryIdentityResources(InMemoryConfig.GetIdentityResources())
+            var builder = services.AddIdentityServer(options =>
+                {
+                    options.Events.RaiseErrorEvents = true;
+                    options.Events.RaiseInformationEvents = true;
+                    options.Events.RaiseFailureEvents = true;
+                    options.Events.RaiseSuccessEvents = true;
+
+                    // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
+                    options.EmitStaticAudienceClaim = true;
+                })
                 .AddTestUsers(InMemoryConfig.GetUsers())
-                //.AddInMemoryClients(InMemoryConfig.GetClients())
-                .AddConfigurationStore(options =>
-                {
-                    options.ConfigureDbContext = builder => builder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
-                        sql => sql.MigrationsAssembly(migrationAssembly));
-                })
-                .AddOperationalStore(options =>
-                {
-                    options.ConfigureDbContext = builder => builder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
-                        sql => sql.MigrationsAssembly(migrationAssembly));
-                })
+                //.AddInMemoryApiResources(InMemoryConfig.GetApiResources())
+                .AddInMemoryIdentityResources(InMemoryConfig.GetIdentityResources())
+                .AddInMemoryApiScopes(InMemoryConfig.GetApiScopes())
+                .AddInMemoryClients(InMemoryConfig.GetClients())
+                //.AddConfigurationStore(options =>
+                //{
+                //    options.ConfigureDbContext = builder => builder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                //        sql => sql.MigrationsAssembly(migrationAssembly));
+                //})
+                //.AddOperationalStore(options =>
+                //{
+                //    options.ConfigureDbContext = builder => builder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                //        sql => sql.MigrationsAssembly(migrationAssembly));
+                //})
                 .AddDeveloperSigningCredential();
+            builder.Services.ConfigureExternalCookie(options =>
+            {
+                options.Cookie.IsEssential = true;
+                options.Cookie.SameSite = (SameSiteMode)(-1);
+            });
+
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.IsEssential = true;
+                options.Cookie.SameSite = (SameSiteMode)(-1);
+            });
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie("Cookies", options =>
+            {
+                options.Cookie.SameSite = (SameSiteMode)(-1); ;
+            });
 
             services.AddControllersWithViews();
 
@@ -61,7 +88,6 @@ namespace AuthServer
 
             app.UseIdentityServer();
 
-            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
