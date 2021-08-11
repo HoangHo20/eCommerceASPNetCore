@@ -411,5 +411,15 @@ namespace TestProject
          Hello from me under salad
         baybe comming to hear me
          */
+
+        void Randomnumber()
+        {
+            Console.WriteLine("lets me random it for you");
+        }
+
+        /*
+         * Touch the sky
+         * Let me fly
+         */
     }
 }
